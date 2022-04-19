@@ -1,11 +1,11 @@
 import React, {Fragment} from 'react';
 import Typography from '@mui/material/Typography';
 
-export default function collections(props) {
+export default function Collections(props) {
     return (
         <Fragment>
             <Typography component="div" variant='h6'>
-                collection stuff
+                collections
             </Typography>
         </Fragment>
     )

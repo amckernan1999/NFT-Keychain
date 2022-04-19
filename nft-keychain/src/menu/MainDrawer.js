@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -15,6 +15,9 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+
+import Collections from '../pages/collections'
+import Settings from '../pages/settings'
 
 const drawerWidth = 240;
 
@@ -63,49 +66,49 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-const TopBar = ({open, handleDrawerOpen, title, button1, button2, logoutAction}) => {
-    // This component is responsible for rendering the Toolbar that is drawn
-    // at the top of the drawer.
+// const TopBar = ({open, handleDrawerOpen, title, button1, button2, logoutAction}) => {
+//     // This component is responsible for rendering the Toolbar that is drawn
+//     // at the top of the drawer.
 
-    return (
-        <Fragment>
-            <AppBar position="fixed" open={open} >
-                <Toolbar>
-                    {/* <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
-                    >
-                        <MenuIcon />
-                    </IconButton> */}
-                    <Box justifyContent="center" flex={0.5} component="span">
-                        <Typography variant="h6" noWrap component="div" align="center">
-                            {title}
-                        </Typography>
-                    </Box>
-                    <Box justifyContent="center" flex={0.25} component="span" sx={{ p: 1, border: 1 }}>
-                        <Typography variant="h6" noWrap component="div" align="center">
-                            {button1}
-                        </Typography>
-                    </Box>
-                    <Box justifyContent="center" flex={0.25} component="span" sx={{p: 1, border: 1 }}>
-                        <Typography variant="h6" noWrap component="div" align="center">
-                            {button2}
-                        </Typography>
-                    </Box>
-                    <Box justifyContent="right" flex={0.25}>
-                        <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
-                            Logout
-                        </Typography>
-                    </Box>
+//     return (
+//         <Fragment>
+//             <AppBar position="fixed" open={open} >
+//                 <Toolbar>
+//                     {/* <IconButton
+//                         color="inherit"
+//                         aria-label="open drawer"
+//                         onClick={handleDrawerOpen}
+//                         edge="start"
+//                         sx={{ mr: 2, ...(open && { display: 'none' }) }}
+//                     >
+//                         <MenuIcon />
+//                     </IconButton> */}
+//                     <Box justifyContent="center" flex={0.5} component="span">
+//                         <Typography variant="h6" noWrap component="div" align="center">
+//                             {title}
+//                         </Typography>
+//                     </Box>
+//                     <Box justifyContent="center" flex={0.25} component="span" sx={{ p: 1, border: 1 }}>
+//                         <Typography variant="h6" noWrap component="div" align="center">
+//                             {button1}
+//                         </Typography>
+//                     </Box>
+//                     <Box justifyContent="center" flex={0.25} component="span" sx={{p: 1, border: 1 }}>
+//                         <Typography variant="h6" noWrap component="div" align="center">
+//                             {button2}
+//                         </Typography>
+//                     </Box>
+//                     <Box justifyContent="right" flex={0.25}>
+//                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
+//                             Logout
+//                         </Typography>
+//                     </Box>
 
-                </Toolbar>
-            </AppBar>
-        </Fragment>
-    )
-};
+//                 </Toolbar>
+//             </AppBar>
+//         </Fragment>
+//     )
+// };
 
 const PresentationListItems = (props) => {
     return <div>
@@ -150,9 +153,21 @@ const ContainerListItems = (props) => {
 //     }
 // };
 
+
 export default function MainDrawer({title, button1, button2, logoutAction}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [menuSelection, setMenuSelection] = useState('Collections')
+    const menuSelect = (menu) => {
+        if (menu === "Collections") {
+            return <Collections />
+        } else if (menu === "Settings") {
+            return <Settings />
+        }
+        else {
+            console.log('error selecting menu');
+        }
+    }
 
     console.log('in MainDrawer');
 
@@ -167,7 +182,42 @@ export default function MainDrawer({title, button1, button2, logoutAction}) {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <TopBar title={title} open={open} handleDrawerOpen={handleDrawerOpen} button1={button1} button2={button2} logoutAction={logoutAction} />
+            <Fragment>
+                <AppBar position="fixed" open={open} >
+                    <Toolbar>
+                        {/* <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                        >
+                            <MenuIcon />
+                        </IconButton> */}
+                        <Box justifyContent="center" flex={0.5} component="span">
+                            <Typography variant="h6" noWrap component="div" align="center">
+                                {title}
+                            </Typography>
+                        </Box>
+                        <Box justifyContent="center" flex={0.25} component="span" sx={{ p: 1, border: 1 }}>
+                            <Typography variant="h6" noWrap component="div" align="center" onClick={() => setMenuSelection("Collections")}>
+                                {button1}
+                            </Typography>
+                        </Box>
+                        <Box justifyContent="center" flex={0.25} component="span" sx={{p: 1, border: 1 }}>
+                            <Typography variant="h6" noWrap component="div" align="center" onClick={() => setMenuSelection("Settings")}>
+                                {button2}
+                            </Typography>
+                        </Box>
+                        <Box justifyContent="right" flex={0.25}>
+                            <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
+                                Logout
+                            </Typography>
+                        </Box>
+
+                    </Toolbar>
+                </AppBar>
+            </Fragment>
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -204,6 +254,7 @@ export default function MainDrawer({title, button1, button2, logoutAction}) {
             <Main open={open}>
                 <DrawerHeader />
                 {/* {findSelectedComponent(selectedItem).component} */}
+                {menuSelect(menuSelection)}
             </Main>
         </Box>
     );
