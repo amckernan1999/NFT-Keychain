@@ -1,9 +1,11 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
+// const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+// puppeteer.use(StealthPlugin());
 const fs = require("fs");
 
-let browser_test_url = ["https://foundation.app/@spasi___sohrani/GPSG/15"]
+let browser_test_url = ["https://mintable.app/COLLECTIBLES/item/Happy-Pugs-8-MINT/ULKEheYYY7J1F3h"]
 let browser_test_urls = ["https://foundation.app/@spasi___sohrani/GPSG/15",
                           "https://rarible.com/token/0x57a204aa1042f6e66dd7730813f4024114d74f37:1700", 
                           "https://makersplace.com/bluepolescapital/a-spark-of-an-idea-1-of-1-167320/",
@@ -53,21 +55,18 @@ function webs(urls) {
               // mintable not working
               else if (urls[i].slice(0, 20) === "https://mintable.app") {
                 console.log("https://mintable.app");
-                image_url = $('.Image_wrapper__AzPWo MediaGallery_previewMediaCard__F0mji Image_visible__OrBzBp > img').attr('src');
+                // Image_container__zulTR MediaGallery_previewImgCard__4WZRP
+                image_url = $(".Image_overlay__1+3kG > img").attr('src');
                 image_urls.push(image_url)
               }
-
-              // knownorigin not working
               else if (urls[i].slice(0, 22) === "https://knownorigin.io") {
                 console.log("https://knownorigin.io");
-                image_url = $('.tile is-child > section > figure > div > img').attr('src');
+                image_url = $('.tile > div > div > div > div > section > figure > div > img').attr('src');
                 image_urls.push(image_url)
               }
-
-              // opensea not working
               else if (urls[i].slice(0, 18) === "https://opensea.io") {
                 console.log("https://opensea.io");
-                image_url = $('Blockreact__Block-sc-1xf18x6-0 Flexreact__Flex-sc-1twd32i-0 FlexColumnreact__FlexColumn-sc-1wwz3hp-0 VerticalAlignedreact__VerticalAligned-sc-b4hiel-0 CenterAlignedreact__CenterAligned-sc-cjf6mn-0 bKhpmf jYqxGr ksFzlZ iXcsEj cgnEmv > img').attr('src');
+                image_url = $('.AssetMedia--img').attr('src');
                 image_urls.push(image_url)
               }
               else {
