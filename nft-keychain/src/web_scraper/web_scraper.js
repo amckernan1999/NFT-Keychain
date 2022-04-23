@@ -16,13 +16,11 @@ let browser_test_urls = ["https://foundation.app/@spasi___sohrani/GPSG/15",
 async function grab_image(url, title) {
   const file_path = "./images/" + title + ".png";
 
-  console.log('\ngrabbing image');
   const response = await axios({
     url,
     method: 'GET',
     responseType: 'stream'
   });
-  console.log('\naxioos finished');
 
   return new Promise((resolve, reject) => {
     response.data.pipe(fs.createWriteStream(file_path))
@@ -56,11 +54,12 @@ function webs(urls) {
               let $ = cheerio.load(bodyHTML);
               //console.log(bodyHTML); // thie will print the entire html page
 
+              // this chain of conditionals routes the web scraper to different websites
               if (urls[i].slice(0, 22) === "https://foundation.app") {
-                console.log("https://foundation.app");
-                image_url = $('.fullscreen > img').attr('src');
-                image_title = $('.fullscreen > img').attr('alt');
-                if (image_url === undefined || image_title === undefined) {
+                console.log("https://foundation.app");  // to test if requests are being sent to the right website
+                image_url = $('.fullscreen > img').attr('src');  // scraping for the nft url
+                image_title = $('.fullscreen > img').attr('alt');  // scraping for the nft title
+                if (image_url === undefined) {  // if a url cannot be found we ignore it and send an error message so we know what went wrong
                   console.log('failed to find image at', urls[i]);
                 } else {
                   console.log('successfully found something at', urls[i])
