@@ -1,8 +1,10 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const sizeOf = require('image-size');
 const puppeteer = require('puppeteer');
 // const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 // puppeteer.use(StealthPlugin());
+const jimp = require('jimp');
 const fs = require('fs');
 
 let browser_test_url = ["https://opensea.io/assets/matic/0x28009881f0ffe85c90725b8b02be55773647c64a/20"]
@@ -13,6 +15,24 @@ let browser_test_urls = ["https://foundation.app/@spasi___sohrani/GPSG/15",
                           "https://knownorigin.io/gallery/10817000-iv-xx",
                           "https://opensea.io/assets/matic/0x28009881f0ffe85c90725b8b02be55773647c64a/20"];
 
+
+async function resize_images() {
+  const image_files = fs.readdirSync("./images/");
+
+  for (let i = 0; i < image_files.length; i++) {
+    let image_dimensions = sizeOf("./images/" + image_files[i])
+    
+    let m = Math.max(image_dimensions.width, image_dimensions.height) / 240;
+    let newW = Math.floor(image_dimensions.width/m);
+    let newH = Math.floor(image_dimensions.height/m);
+    
+    let image = await jimp.read("./images/" + image_files[i]);
+    image.resize(newW, newH);
+    // await image.quality(100);
+    await image.writeAsync("./images/" + image_files[i]);
+  }
+}
+                          
 async function grab_image(url, title) {
   const file_path = "./images/" + title + ".png";
 
@@ -26,7 +46,6 @@ async function grab_image(url, title) {
     response.data.pipe(fs.createWriteStream(file_path))
                 .on('error', reject)
                 .on('error', () => console.log('error downloading image'))
-                .on('finish', () => console.log('finished'))
                 .once('close', () => resolve(file_path));
   });
 }
@@ -154,8 +173,9 @@ function webs(urls) {
         for (let i = 0; i < image_urls.length; i++) {
           console.log(image_urls[i]);
           console.log(image_titles[i]);
-          grab_image(image_urls[i], image_titles[i]);
+          await grab_image(image_urls[i], image_titles[i]);
         }
+        await resize_images();
   })();
 }
 
