@@ -20,6 +20,9 @@ async function resize_images() {
   const image_files = fs.readdirSync("./images/");
 
   for (let i = 0; i < image_files.length; i++) {
+    if (image_files[i] === ".gitignore") {
+      i++;
+    }
     let image_dimensions = sizeOf("./images/" + image_files[i])
     
     let m = Math.max(image_dimensions.width, image_dimensions.height) / 240;
