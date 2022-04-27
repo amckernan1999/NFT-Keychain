@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
 */
 
 var connection = mysql.createConnection({
-//    debug: true,
+    debug: true,
 
     host: 'localhost',
     port: 3306,

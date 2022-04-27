@@ -18,6 +18,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 import Collections from '../pages/collections'
 import Settings from '../pages/settings'
+import Button from "@mui/material/Button";
 
 const drawerWidth = 240;
 
@@ -66,7 +67,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-// const TopBar = ({open, handleDrawerOpen, title, button1, button2, logoutAction}) => {
+// const TopBar = ({open, handleDrawerOpen, title, collectionsButton, settingsButton, logoutAction}) => {
 //     // This component is responsible for rendering the Toolbar that is drawn
 //     // at the top of the drawer.
 
@@ -90,12 +91,12 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 //                     </Box>
 //                     <Box justifyContent="center" flex={0.25} component="span" sx={{ p: 1, border: 1 }}>
 //                         <Typography variant="h6" noWrap component="div" align="center">
-//                             {button1}
+//                             {collectionsButton}
 //                         </Typography>
 //                     </Box>
 //                     <Box justifyContent="center" flex={0.25} component="span" sx={{p: 1, border: 1 }}>
 //                         <Typography variant="h6" noWrap component="div" align="center">
-//                             {button2}
+//                             {settingsButton}
 //                         </Typography>
 //                     </Box>
 //                     <Box justifyContent="right" flex={0.25}>
@@ -154,7 +155,7 @@ const ContainerListItems = (props) => {
 // };
 
 
-export default function MainDrawer({title, button1, button2, logoutAction}) {
+export default function MainDrawer({mainPageTitle, collectionsButton, settingsButton, logoutAction}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [menuSelection, setMenuSelection] = useState('Collections')
@@ -179,6 +180,8 @@ export default function MainDrawer({title, button1, button2, logoutAction}) {
         setOpen(false);
     };
 
+
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -194,27 +197,16 @@ export default function MainDrawer({title, button1, button2, logoutAction}) {
                         >
                             <MenuIcon />
                         </IconButton> */}
-                        <Box justifyContent="center" flex={0.5} component="span">
-                            <Typography variant="h6" noWrap component="div" align="center">
-                                {title}
+                        <Box justifyContent="right" flex={1}>
+                            <Typography variant="h6" noWrap component="div" align="left">
+                                {mainPageTitle}
                             </Typography>
                         </Box>
-                        <Box justifyContent="center" flex={0.25} component="span" sx={{ p: 1, border: 1 }}>
-                            <Typography variant="h6" noWrap component="div" align="center" onClick={() => setMenuSelection("Collections")}>
-                                {button1}
-                            </Typography>
-                        </Box>
-                        <Box justifyContent="center" flex={0.25} component="span" sx={{p: 1, border: 1 }}>
-                            <Typography variant="h6" noWrap component="div" align="center" onClick={() => setMenuSelection("Settings")}>
-                                {button2}
-                            </Typography>
-                        </Box>
-                        <Box justifyContent="right" flex={0.25}>
+                        <Box justifyContent="right" flex={1}>
                             <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
                                 Logout
                             </Typography>
                         </Box>
-
                     </Toolbar>
                 </AppBar>
             </Fragment>

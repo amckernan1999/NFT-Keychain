@@ -51,8 +51,8 @@ export default function Login({setUser}) {
                     if( userInfo.status === "OK" ) {
                         setUser(user);
                     } else  {
-                        setVerifyUser(false);
-                        setAuthFailed(true);
+                        setVerifyUser(true);
+                        setAuthFailed(false);
                     }
                 });
         }
@@ -106,12 +106,12 @@ export default function Login({setUser}) {
 
     return (
        <Fragment>
-           <Box display="flex" justifyContent="center" alignItems="center" width="100%" mt={10}>
+           <Box className={"login_box"} display="flex" justifyContent="center" alignItems="center" width="100%" mt={10}>
 
                 <TextField
                     error={authFailed}
                     id="outlined-error-helper-text"
-                    label="Login name"
+                    label="Username"
                     placeholder=""
                     value={userInput}
                     onChange={handleInputChange}
@@ -122,6 +122,7 @@ export default function Login({setUser}) {
            <Box display="flex" justifyContent="center" alignItems="center" width="100%" mt={1}>
 
                 <TextField
+                    type="password"
                     error={authFailed}
                     id="outlined-error-helper-text"
                     label="Password"
@@ -137,12 +138,17 @@ export default function Login({setUser}) {
                     variant="outlined"
                     size="medium"
                     onClick={() => {setVerifyUser(true)}}
-                >Proceed
+                >LOGIN
             </Button>
            </Box>
-           <Typography variant="h7" noWrap component="div" align="center" mt={1} onClick={() => makeAccount()}>
-                Make Account
-            </Typography>
+           <Box display="flex" justifyContent="center" alignItems="center" width="100%" mt={2}>
+               <Button
+                   variant="outlined"
+                   size="medium"
+                   onClick={() => {makeAccount()}}
+               >CREATE ACCOUNT
+               </Button>
+           </Box>
        </Fragment>
 
     );
