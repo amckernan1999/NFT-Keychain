@@ -11,8 +11,8 @@ function UserLogin({Login, error}) {
 
         // i didn't know what the following two lines are for
 
-        // e.preventDefault();
-        // Login(details);
+        e.preventDefault();
+        Login(details);
 
         if (true) { // TODO: if (clicked login)
             const api = new API();
