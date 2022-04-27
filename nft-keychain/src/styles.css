@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Calibri, sans-serif;
+}
+
+input, button {
+    appearance: none;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.App {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("nft.png");
+    background-color: white;
+    background-size: 100%;
+}
+
+.App h2 {
+    color: black;
+    font-size: 36px;
+    font-weight: 1000;
+    margin-bottom: 25px;
+    align-items: center;
+    text-align: center;
+}
+
+form {
+    display: block;
+    position: relative;
+}
+
+form:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -7px;
+    left: -7px;
+    right: -7px;
+    bottom: -7px;
+    z-index: 1;
+    background-color: black;
+}
+
+form .form-inner {
+    position: relative;
+    display: block;
+    background-color: white;
+    padding: 25px;
+    z-index: 2;
+}
+
+form .form-inner h2 {
+    color: black;
+    font-size: 36px;
+    font-weight: 1000;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+form .form-inner .form-group {
+    display: block;
+    width: 300px;
+    margin-bottom: 15px;
+}
+
+.form-inner .form-group label {
+    display: block;
+    color: black;
+    font-size: 18px;
+    margin-bottom: 5px;
+    transition: 0.1s;
+}
+
+.form-inner .form-group:focus-within label {
+    color: dimgrey;
+}
+
+form .form-inner .form-group input {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 8px;
+    transition: 0.1s;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+form .form-inner .form-group input:focus {
+    box-shadow: 0px 0px 3px black;
+}
+
+form .form-inner input[type="submit"] {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background-color: cyan;
+    background-size: 200%;
+    background-position: 0%;
+    transition: 0.1s;
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: 100px;
+}
+
+form .form-inner input[type="submit"]:hover, .collections button:hover {
+    background-position: 100% 0%;
+}
+
+.collections {
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+    height: 90%;
+    background-color: white;
+    padding: 15px 30px;
+}
+
+.collections h2 {
+    color: black;
+    font-size: 36px;
+    font-weight: 1000;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.collections button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    background-color: cyan;
+    background-size: 200%;
+    background-position: 0%;
+    transition: 0.1s;
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    margin-left: 250px;
+}
+
+form .form-inner .error-message {
+    color: red;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 40px;
+    margin-bottom: 5px;
+}

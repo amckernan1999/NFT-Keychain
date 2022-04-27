@@ -1,12 +1,21 @@
-import React, {Fragment} from 'react';
-import Typography from '@mui/material/Typography';
+import React from "react";
 
-export default function Collections(props) {
+function Collections({Logout, error}) {
+
+    const submitHandler = e => {
+        e.preventDefault();
+        Logout();
+    }
+
     return (
-        <Fragment>
-            <Typography component="div" variant='h6'>
-                collections
-            </Typography>
-        </Fragment>
+        <div className={"collections"}>
+            <h2> COLLECTIONS PAGE</h2>
+            <button onClick={Logout}>LOGOUT</button>
+            <button>ADD NFT</button>
+            <button>SELECT SD CARD</button>
+            <button>TRANSFER</button>
+        </div>
     )
 }
+
+export default Collections;
