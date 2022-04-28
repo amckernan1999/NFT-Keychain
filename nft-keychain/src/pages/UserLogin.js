@@ -9,7 +9,6 @@ function UserLogin({Login, error}) {
     const submitHandler = e => {
         // console.log('submit handler', details);
         e.preventDefault();
-        // Login(details);
 
         if (details.button === "LOGIN") { // TODO: if (clicked login)
             console.log('login button pressed')
@@ -23,6 +22,7 @@ function UserLogin({Login, error}) {
                                 console.log('success');
                             } else  {
                                 console.log('failure')
+                                Login(details);
                             }
                         });
                 }
