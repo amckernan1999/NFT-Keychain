@@ -13,7 +13,13 @@ let browser_test_urls = ["https://foundation.app/@spasi___sohrani/GPSG/15",
                           "https://makersplace.com/bluepolescapital/a-spark-of-an-idea-1-of-1-167320/",
                           "https://mintable.app/COLLECTIBLES/item/Happy-Pugs-8-MINT/ULKEheYYY7J1F3h", // not working
                           "https://knownorigin.io/gallery/10817000-iv-xx",
-                          "https://opensea.io/assets/matic/0x28009881f0ffe85c90725b8b02be55773647c64a/20"];
+                          "https://opensea.io/assets/matic/0x28009881f0ffe85c90725b8b02be55773647c64a/20",
+                          "https://knownorigin.io/gallery/11033000-abstract-maiden",
+                          "https://knownorigin.io/gallery/11054000-realm-electric-me",
+                          "https://makersplace.com/astraultra/path-4b-1-of-1-376667/",
+                          "https://foundation.app/@nathanaelbillings/wavy/2",
+                          "https://opensea.io/assets/0xd25508dab0b8fa88e783ee065d8f78b10745dd21/3",
+                        ];
 
 
 async function resize_images() {
@@ -74,7 +80,7 @@ function webs(urls) {
               await page.goto(urls[i], {timeout: 100000});
               let bodyHTML = await page.evaluate(() => document.body.innerHTML);
               let $ = cheerio.load(bodyHTML);
-              //console.log(bodyHTML); // thie will print the entire html page
+              // console.log(bodyHTML); // this will print the entire html page
 
               // this chain of conditionals routes the web scraper to different websites
               if (urls[i].slice(0, 22) === "https://foundation.app") {
@@ -111,6 +117,8 @@ function webs(urls) {
                   console.log('failed to find image at', urls[i]);
                 } else {
                   console.log('successfully found something at', urls[i])
+                  image_title = image_title.replace(':', '-'); // files can't have ":" in them, need to do more robust error catching for titles
+                  image_title = image_title.replace('.', '-'); // files can't have ":" in them, need to do more robust error catching for titles
                   image_urls.push(image_url)
                   image_titles.push(image_title)
                 }
@@ -145,7 +153,8 @@ function webs(urls) {
               }
               else if (urls[i].slice(0, 18) === "https://opensea.io") {
                 console.log("https://opensea.io");
-                image_url = $('.AssetMedia--img').attr('src');
+                image_url = $('.Image--image').attr('src');
+                // image_url = $('.AssetMedia--img').attr('src');
                 image_title = $('.item--title').attr('title');
                 if (image_url === undefined) {
                   console.log('failed to find image at', urls[i]);
@@ -154,6 +163,7 @@ function webs(urls) {
                   image_title = image_title.replace(':', '-'); // files can't have ":" in them, need to do more robust error catching for titles
                   image_title = image_title.replace(':', '-'); // files can't have ":" in them, need to do more robust error catching for titles
                   image_title = image_title.replace('@', ''); // files can't have "@" in them, need to do more robust error catching for titles
+                  image_title = image_title.replace('.', '-'); // files can't have ":" in them, need to do more robust error catching for titles
                   console.log(image_title);
                   image_urls.push(image_url)
                   image_titles.push(image_title)
