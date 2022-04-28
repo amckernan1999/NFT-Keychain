@@ -5,7 +5,6 @@ import AccountCreation from "./AccountCreation.js";
 
 function UserLogin({Login, error}) {
     const [details, setDetails] = useState({name: "", password: "", button: ""});
-    const [selectedButton, setSelectedButton] = useState("");
 
     const submitHandler = e => {
         // console.log('submit handler', details);
