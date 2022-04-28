@@ -13,19 +13,23 @@ function UserLogin({Login, error}) {
 
         if (details.button === "LOGIN") { // TODO: if (clicked login)
             console.log('login button pressed')
-            const api = new API();
-            async function getUserInfo() {
-                api.getUserInfo(details.name, details.password)
-                    .then( userInfo => {
-                        if( userInfo.status === "OK" ) {
-                            console.log('success');
-                        } else  {
-                            console.log('failure')
-                        }
-                    });
+
+            if (details.name !== "" && details.password !== "") {
+                const api = new API();
+                async function getUserInfo() {
+                    api.getUserInfo(details.name, details.password)
+                        .then( userInfo => {
+                            if( userInfo.status === "OK" ) {
+                                console.log('success');
+                            } else  {
+                                console.log('failure')
+                            }
+                        });
+                }
+    
+                getUserInfo()
             }
 
-            getUserInfo()
         }
         else if (details.button === "CREATE ACCOUNT") { // TODO: else if (clicked create account)
             console.log('create account button pressed');
@@ -46,8 +50,8 @@ function UserLogin({Login, error}) {
                         <label htmlFor="name">Password:</label>
                         <input type="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
                     </div>
-                    <input type="submit" value="CREATE ACCOUNT" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
                     <input type="submit" value="LOGIN" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
+                    <input type="submit" value="CREATE ACCOUNT" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
                 </div>
             </form>
         </div>
