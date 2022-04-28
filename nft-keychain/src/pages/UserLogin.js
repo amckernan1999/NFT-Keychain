@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import API from '../../src/API_Interface/API_Interface.js';
-import Collections from './Collections.js';
+import Collections from './collections';
 import AccountCreation from "./AccountCreation.js";
 
 function UserLogin({Login, error}) {
@@ -35,22 +35,24 @@ function UserLogin({Login, error}) {
     }
 
     return (
-        <form onSubmit={submitHandler}>
-            <div className="form-inner">
-                <h2>NFT Keychain</h2>
-                {(error !== "") ? ( <div className={error}>Invalid username or password.</div> ) : ""}
-                <div className="form-group">
-                    <label htmlFor="name">Username:</label>
-                    <input type="text" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name} />
+        <div className={"background"}>
+            <form onSubmit={submitHandler}>
+                <div className="form-inner">
+                    <h2>NFT Keychain</h2>
+                    {(error !== "") ? ( <div className={error}>Invalid username or password.</div> ) : ""}
+                    <div className="form-group">
+                        <label htmlFor="name">Username:</label>
+                        <input type="text" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="name">Password:</label>
+                        <input type="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
+                    </div>
+                    <input type="submit" value="CREATE ACCOUNT" />
+                    <input type="submit" value="LOGIN" />
                 </div>
-                <div className="form-group">
-                    <label htmlFor="name">Password:</label>
-                    <input type="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
-                </div>
-                <input type="submit" value="CREATE ACCOUNT" />
-                <input type="submit" value="LOGIN" />
-            </div>
-        </form>
+            </form>
+        </div>
     )
 }
 

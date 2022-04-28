@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import './styles.css';
 import UserLogin from "./pages/UserLogin";
-import Collections from "./pages/Collections";
+import Collections from "./pages/collections";
 import AccountCreation from "./pages/AccountCreation";
 
 function App() {
