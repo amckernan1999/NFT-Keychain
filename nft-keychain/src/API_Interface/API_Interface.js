@@ -22,8 +22,8 @@ const AxiosConfigured = () => {
 const axiosAgent = AxiosConfigured();
 
 export default class APIInterface {
-
     async getUserInfo(userName, userPassword) {
+        console.log('getuserinfo');
         return axiosAgent.get(`login/${userName}/${userPassword}`)
             .then(userInfo => userInfo.data)
             .catch(error => (
@@ -32,5 +32,24 @@ export default class APIInterface {
                     user: undefined
                  }));
     }
-
+    async checkUserInfo(userName) {
+        console.log('checkUserInfo');
+        return axiosAgent.get(`login/${userName}`)
+            .then(userInfo => userInfo.data)
+            .catch(error => (
+                {
+                    error,
+                    user: undefined
+                 }));
+    }
+    async createUserInfo(userName, userPassword, create) {
+        console.log('createUserInfo');
+        return axiosAgent.get(`login/${userName}/${userPassword}/${create}`)
+            .then(userInfo => userInfo.data)
+            .catch(error => (
+                {
+                    error,
+                    user: undefined
+                 }));
+    }
 }

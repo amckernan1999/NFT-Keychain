@@ -6,10 +6,6 @@ import AccountCreation from "./pages/AccountCreation";
 import API from './API_Interface/API_Interface.js';
 
 function App() {
-  const adminUser = {
-    name: "admin",
-    password: "admin"
-  }
 
   const [b, setB] = useState("");
   const [user, setUser] = useState({name: ""});
@@ -17,19 +13,38 @@ function App() {
 
   const CreateAccount = details => {
     console.log('create account', details);
-    setB("CREATE ACCOUNT");
 
-    // if (details.name != adminUser.name && details.password != adminUser.password)
-    // {
-    //   console.log("Created account")
-    //   setUser({
-    //     name: details.name,
-    //     password: details.password
-    //   });
-    // } else {
-    //   console.log("Details do not match");
-    //   setError("error-message");
-    // }
+    if (details.button === "CREATE ACCOUNT") {
+      console.log('second create account button pressed');
+
+      if (details.name !== "" && details.password !== "") {
+        const api = new API();
+        async function checkUserInfo() {
+          api.checkUserInfo(details.name)
+              .then( userInfo => {
+                console.log('asdfasdfasgas');
+                if( userInfo.status === "Success" ) {
+                  console.log("Creating account")
+                  api.createUserInfo(details.name, details.password, "create");
+                  console.log("Logged in")
+                  setB("LOGIN");
+                  setUser({
+                    name: details.name,
+                    password: details.password
+                  });
+                    
+                } else  {
+                  console.log(userInfo, "already a user with that username");
+                  setError("error-message");
+                }
+              });
+        }
+        checkUserInfo()
+      } else {
+        console.log('username and password cant be empty'); // TODO: need better error checking
+      }
+
+    }
   }
 
   const Login = details => {
@@ -61,21 +76,9 @@ function App() {
 
     }
     else if (details.button === "CREATE ACCOUNT") {
-        console.log('create account button pressed');
-        CreateAccount(details);
+        console.log('first create account button pressed');
+        setB("CREATE ACCOUNT");
     }
-
-    // if (details.name == adminUser.name && details.password == adminUser.password)
-    // {
-    //   console.log("Logged in")
-    //   setUser({
-    //     name: details.name,
-    //     password: details.password
-    //   });
-    // } else {
-    //   console.log("Details do not match");
-    //   setError("error-message");
-    // }
   }
 
   const Logout = () => {
@@ -87,7 +90,7 @@ function App() {
   if (b === "CREATE ACCOUNT") {
     return (
       <div className="App">
-        <AccountCreation />;
+        <AccountCreation CreateAccount={CreateAccount} error={error}/>;
       </div>
     )
   }

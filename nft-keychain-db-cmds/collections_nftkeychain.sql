@@ -3,7 +3,9 @@ use nftkeychain;
 DROP TABLE IF EXISTS collections CASCADE;
 
 CREATE TABLE `collections` (
+    `nftID` INT AUTO_INCREMENT PRIMARY KEY,
 	`url` varchar(500) NOT NULL,
-    `userName` varchar(100) NOT NULL,
-    PRIMARY KEY (`url`)
+    `title` varchar(500) NOT NULL,
+    `path` varchar(500) NOT NULL,
+    `userID` VARCHAR(8) NOT NULL
 );
