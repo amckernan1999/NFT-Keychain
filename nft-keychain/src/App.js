@@ -3,6 +3,7 @@ import './styles.css';
 import UserLogin from "./pages/UserLogin";
 import Collections from "./pages/collections";
 import AccountCreation from "./pages/AccountCreation";
+import API from './API_Interface/API_Interface.js';
 
 function App() {
   const adminUser = {
@@ -32,17 +33,47 @@ function App() {
   const Login = details => {
     console.log(details);
 
-    if (details.name == adminUser.name && details.password == adminUser.password)
-    {
-      console.log("Logged in")
-      setUser({
-        name: details.name,
-        password: details.password
-      });
-    } else {
-      console.log("Details do not match");
-      setError("error-message");
+    if (details.button === "LOGIN") {
+      console.log('login button pressed')
+
+      if (details.name !== "" && details.password !== "") {
+          const api = new API();
+          async function getUserInfo() {
+              api.getUserInfo(details.name, details.password)
+                  .then( userInfo => {
+                      if( userInfo.status === "OK" ) {
+                        console.log("Logged in")
+                        setUser({
+                          name: details.name,
+                          password: details.password
+                        });
+                          
+                      } else  {
+                        console.log("Details do not match");
+                        setError("error-message");
+                      }
+                  });
+          }
+          getUserInfo()
+      }
+
     }
+    else if (details.button === "CREATE ACCOUNT") {
+        console.log('create account button pressed');
+        CreateAccount(details);
+    }
+
+    // if (details.name == adminUser.name && details.password == adminUser.password)
+    // {
+    //   console.log("Logged in")
+    //   setUser({
+    //     name: details.name,
+    //     password: details.password
+    //   });
+    // } else {
+    //   console.log("Details do not match");
+    //   setError("error-message");
+    // }
   }
 
   const Logout = () => {

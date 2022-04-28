@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import API from '../../src/API_Interface/API_Interface.js';
-import Collections from './collections.js';
-import AccountCreation from "./AccountCreation.js";
 
 function UserLogin({Login, error}) {
     const [details, setDetails] = useState({name: "", password: "", button: ""});
@@ -9,31 +6,7 @@ function UserLogin({Login, error}) {
     const submitHandler = e => {
         // console.log('submit handler', details);
         e.preventDefault();
-
-        if (details.button === "LOGIN") { // TODO: if (clicked login)
-            console.log('login button pressed')
-
-            if (details.name !== "" && details.password !== "") {
-                const api = new API();
-                async function getUserInfo() {
-                    api.getUserInfo(details.name, details.password)
-                        .then( userInfo => {
-                            if( userInfo.status === "OK" ) {
-                                console.log('success');
-                            } else  {
-                                console.log('failure')
-                                Login(details);
-                            }
-                        });
-                }
-    
-                getUserInfo()
-            }
-
-        }
-        else if (details.button === "CREATE ACCOUNT") { // TODO: else if (clicked create account)
-            console.log('create account button pressed');
-        }
+        Login(details);
     }
 
     return (
