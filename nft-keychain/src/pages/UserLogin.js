@@ -4,17 +4,16 @@ import Collections from './Collections.js';
 import AccountCreation from "./AccountCreation.js";
 
 function UserLogin({Login, error}) {
-    const [details, setDetails] = useState({name: "", password: ""});
+    const [details, setDetails] = useState({name: "", password: "", button: ""});
+    const [selectedButton, setSelectedButton] = useState("");
 
     const submitHandler = e => {
-        console.log('submit handler', details);
-
-        // i didn't know what the following two lines are for
-
+        // console.log('submit handler', details);
         e.preventDefault();
-        Login(details);
+        // Login(details);
 
-        if (true) { // TODO: if (clicked login)
+        if (details.button === "LOGIN") { // TODO: if (clicked login)
+            console.log('login button pressed')
             const api = new API();
             async function getUserInfo() {
                 api.getUserInfo(details.name, details.password)
@@ -29,8 +28,8 @@ function UserLogin({Login, error}) {
 
             getUserInfo()
         }
-        else if (true) { // TODO: else if (clicked create account)
-            console.log('create account');
+        else if (details.button === "CREATE ACCOUNT") { // TODO: else if (clicked create account)
+            console.log('create account button pressed');
         }
     }
 
@@ -47,8 +46,8 @@ function UserLogin({Login, error}) {
                     <label htmlFor="name">Password:</label>
                     <input type="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
                 </div>
-                <input type="submit" value="CREATE ACCOUNT" />
-                <input type="submit" value="LOGIN" />
+                <input type="submit" value="CREATE ACCOUNT" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
+                <input type="submit" value="LOGIN" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
             </div>
         </form>
     )
