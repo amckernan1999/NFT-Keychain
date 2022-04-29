@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import App from "../App";
 
 function AccountCreation({CreateAccount, error}) {
-    const [details, setDetails] = useState({name: "", password: ""});
+    const [details, setDetails] = useState({name: "", password: "", button: ""});
 
     const submitHandler = e => {
         console.log('account creation submit handler', details);

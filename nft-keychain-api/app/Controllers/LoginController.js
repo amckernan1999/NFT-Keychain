@@ -25,11 +25,10 @@ class LoginController {
                         console.log("Query error.", error);
                         return reject(`Query error. Error msg: error`);
                     }
-                    if (tuples.length === 1) {  // Did we have a matching user record?
-                        setAccessToken(ctx, tuples[0]);
+                    if (tuples.length === 1) {
                         ctx.body = {
                             status: "OK",
-                            user: tuples[0],
+                            userID: tuples[0].userID,
                         };
                     } else {
                         console.log('Not able to identify the user.');
@@ -59,7 +58,6 @@ class LoginController {
                     sql: query,
                     values: [ctx.params.userName]
                 }, (error, tuples) => {
-                    console.log('t', tuples);
                     if (error) {
                         console.log("Query error.", error);
                         return reject(`Query error. Error msg: error`);
@@ -90,7 +88,7 @@ class LoginController {
         console.log('createUser');
         return new Promise((resolve, reject) => {
 	    
-            let query = "INSERT INTO users (userName, userPassword) VALUES (?, ?)";
+            let query = "INSERT INTO users (userName, userPassword) VALUES (?, ?);";
             dbConnection.query(
                 {
                     sql: query,
@@ -115,6 +113,36 @@ class LoginController {
 
     }
 
+    async getUserID(ctx) {
+        console.log('getUserID');
+        return new Promise((resolve, reject) => {
+	    
+            let query = "SELECT userID FROM users WHERE userName = ?;";
+            dbConnection.query(
+                {
+                    sql: query,
+                    values: [ctx.params.userName]
+                }, (error, tuples) => {
+                    if (error) {
+                        console.log("Query error.", error);
+                        return reject(`Query error. Error msg: error`);
+                    }
+                    ctx.body = {
+                        userID: tuples[0].userID
+                    };
+                    return resolve();
+                }
+            )
+        }).catch(err => {
+            console.log('create in LoginController threw an exception. Reason...', err);
+	    ctx.status = 200;
+            ctx.body = {
+                status: "Failed",
+                error: err,
+                user: null
+            };
+        });
+    }
 }
 
 module.exports = LoginController;

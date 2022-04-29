@@ -7,6 +7,7 @@ import API from './API_Interface/API_Interface.js';
 
 function App() {
 
+  const [userID, setUserID] = useState("");
   const [b, setB] = useState("");
   const [user, setUser] = useState({name: ""});
   const [error, setError] = useState("");
@@ -22,11 +23,14 @@ function App() {
         async function checkUserInfo() {
           api.checkUserInfo(details.name)
               .then( userInfo => {
-                console.log('asdfasdfasgas');
                 if( userInfo.status === "Success" ) {
                   console.log("Creating account")
-                  api.createUserInfo(details.name, details.password, "create");
-                  console.log("Logged in")
+                  api.createUserInfo(details.name, details.password, 'create')
+                  api.getUserID(details.name, 'a', 'b', 'get')
+                    .then( userInfo => {
+                      setUserID(userInfo.userID);
+                    })
+                  console.log("Logged in");
                   setB("LOGIN");
                   setUser({
                     name: details.name,
@@ -58,17 +62,18 @@ function App() {
           async function getUserInfo() {
               api.getUserInfo(details.name, details.password)
                   .then( userInfo => {
-                      if( userInfo.status === "OK" ) {
-                        console.log("Logged in")
-                        setUser({
-                          name: details.name,
-                          password: details.password
-                        });
-                          
-                      } else  {
-                        console.log("Details do not match");
-                        setError("error-message");
-                      }
+                    if( userInfo.status === "OK" ) {
+                      console.log("Logged in")
+                      setUserID(userInfo.userID);
+                      setUser({
+                        name: details.name,
+                        password: details.password
+                      });
+                        
+                    } else  {
+                      console.log("Details do not match");
+                      setError("error-message");
+                    }
                   });
           }
           getUserInfo()
@@ -98,7 +103,7 @@ function App() {
     return (
       <div className="App">
         {(user.name !== "") ? (
-            <Collections Logout={Logout} error={error}/>
+            <Collections Logout={Logout} error={error} userID={userID}/>
         ) : (
             <UserLogin Login={Login} error={error}/>
         )}

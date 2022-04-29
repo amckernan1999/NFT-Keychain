@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import Typography from "@mui/material/Typography";
 
-function Collections({Logout, error}) {
+function Collections({Logout, error, userID}) {
+    console.log('collection userID:', userID);
 
     const submitHandler = e => {
         e.preventDefault();

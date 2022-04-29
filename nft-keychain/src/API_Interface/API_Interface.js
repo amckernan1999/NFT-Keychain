@@ -42,7 +42,7 @@ export default class APIInterface {
                     user: undefined
                  }));
     }
-    async createUserInfo(userName, userPassword, create) {
+    async createUserInfo(userName, userPassword,create) {
         console.log('createUserInfo');
         return axiosAgent.get(`login/${userName}/${userPassword}/${create}`)
             .then(userInfo => userInfo.data)
@@ -52,4 +52,16 @@ export default class APIInterface {
                     user: undefined
                  }));
     }
+    async getUserID(userName, a, b, get) {
+        console.log('getUserID');
+        return axiosAgent.get(`login/${userName}/${a}/${b}/${get}`)
+            .then(userInfo => userInfo.data)
+            .catch(error => (
+                {
+                    error,
+                    user: undefined
+                 }));
+    }
+
+    
 }
