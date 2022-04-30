@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import Typography from "@mui/material/Typography";
 
-function Collections({Logout, error}) {
+function Collections({Logout, SelectDevice, Transfer, error, userID}) {
+    console.log('collection userID:', userID);
 
     const submitHandler = e => {
         e.preventDefault();
@@ -115,11 +116,13 @@ function Collections({Logout, error}) {
                 <Button
                     variant="contained"
                     size="large"
+                    onClick={SelectDevice}
                 >SELECT USB
                 </Button>
                 <Button
                     variant="contained"
                     size="large"
+                    onClick={Transfer}
                 >TRANSFER
                 </Button>
                 <Button

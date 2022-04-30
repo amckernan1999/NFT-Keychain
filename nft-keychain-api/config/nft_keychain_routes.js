@@ -34,8 +34,10 @@ const LoginController = new (require('../app/Controllers/LoginController.js'))()
 const loginRouter = require('koa-router')({
     prefix: '/login'
 });
-loginRouter.get('/:userName/:userPassword', LoginController.authorizeUser, (err) => console.log("routers.js: loginRouter error:", err));
-
+loginRouter.get('/:userName/:userPassword', LoginController.authorizeUser, (err) => console.log("nft_keychain_routes.js: loginRouter error:", err));
+loginRouter.get('/:userName', LoginController.checkForUser, (err) => console.log("nft_keychain_routes.js: checkRouter error:", err));
+loginRouter.get('/:userName/:userPassword/:create', LoginController.createUser, (err) => console.log("nft_keychain_routes.js: createRouter error:", err));
+loginRouter.get('/:userName/:a/:b/:get', LoginController.getUserID, (err) => console.log("nft_keychain_routes.js: getUserID error:", err));
 
 
 
