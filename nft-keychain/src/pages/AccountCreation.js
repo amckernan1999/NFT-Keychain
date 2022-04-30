@@ -10,28 +10,34 @@ function AccountCreation({CreateAccount, error}) {
         CreateAccount(details);
     }
 
+    function refreshPage() {
+        window.location.reload();
+    }
+
     if (details.button === "BACK") {
         console.log('back button pressed')
-        return <App />
+        return refreshPage();
     } else {
         return (
-            <form onSubmit={submitHandler}>
-                <div className="form-inner">
-                    <h2>Create Account</h2>
-                    {(error !== "") ? ( <div className={error}>Invalid username or password.</div> ) : ""}
-                    <div className="form-group">
-                        <label htmlFor="name">Username:</label>
-                        <input type="text" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name} />
+            <div className="background">
+                <form onSubmit={submitHandler}>
+                    <div className="form-inner">
+                        <h2>Create Account</h2>
+                        {(error !== "") ? ( <div className={error}>Invalid username or password.</div> ) : ""}
+                        <div className="form-group">
+                            <label htmlFor="name">Username:</label>
+                            <input type="text" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name} />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="name">Password:</label>
+                            <input type="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
+                        </div>
+                        <input type="submit" value="CREATE ACCOUNT" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
+                        <input type="submit" value="BACK" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Password:</label>
-                        <input type="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
-                    </div>
-                    <input type="submit" value="CREATE ACCOUNT" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
-                    <input type="submit" value="BACK" onClick={e => setDetails({...details, button: e.target.value})} button={details.value} />
-                </div>
-            </form>
-        )
+                </form>
+            </div>
+        );
     }
 }
 
