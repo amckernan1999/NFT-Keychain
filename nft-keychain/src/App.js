@@ -92,6 +92,37 @@ function App() {
     console.log("Logout");
   }
 
+    const  SelectDevice = async () => {
+        console.log("entered select");
+
+
+        if ("serial" in navigator) {
+
+            port = await navigator.serial.requestPort();
+            await port.open({ baudRate: 115200 });
+            writer = port.writable.getWriter();
+
+            //await writer.write()
+            // The Web Serial API is supported.
+        }
+    }
+
+    let writer;
+    let port;
+    const PUSH = new Uint8Array([112, 117, 115, 104]);
+    const PULL = new Uint8Array([112, 117, 108, 108]);
+    const REMOVE = new Uint8Array([114, 101, 109, 111, 118, 101]);
+
+    const Transfer = async () => {
+        console.log("entered transfer");
+        await writer.write(PUSH);
+    }
+
+    const RemoveFromKeychain = async () => {
+        console.log("entered remove");
+        await writer.write(PUSH);
+    }
+
   if (b === "CREATE ACCOUNT") {
     return (
       <div className="App">
@@ -103,7 +134,7 @@ function App() {
     return (
       <div className="App">
         {(user.name !== "") ? (
-            <Collections Logout={Logout} error={error} userID={userID}/>
+            <Collections Logout={Logout} SelectDevice={SelectDevice} Transfer={Transfer} error={error} userID={userID}/>
         ) : (
             <UserLogin Login={Login} error={error}/>
         )}
