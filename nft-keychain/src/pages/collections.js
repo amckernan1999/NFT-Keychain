@@ -81,12 +81,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                 <Button
                     variant="contained"
                     size="large"
-                    onClick={SelectDevice}
-                >SELECT USB
-                </Button>
-                <Button
-                    variant="contained"
-                    size="large"
                     onClick={Transfer}
                 >TRANSFER
                 </Button>

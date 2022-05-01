@@ -109,11 +109,19 @@ function App() {
             await writer.write(encoder.encode("begin"));
 
         }
+        else{console.log("Browser does not support serial transfer");}
   }
 
 
 
     const Transfer = async () => {
+
+      console.log(port);
+      if(port === undefined)
+      {
+          await SelectDevice();
+      }
+
       const encoder = new TextEncoder()
       const  sampleTitleKey = "Nft Title : 7cSSrwS21MLPFYHgtFvLpg==";
       console.log("entered transfer");
