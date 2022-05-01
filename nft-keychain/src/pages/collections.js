@@ -1,109 +1,74 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import Typography from "@mui/material/Typography";
+import API from "../API_Interface/API_Interface";
+
+
+
+
 
 function Collections({Logout, SelectDevice, Transfer, error, userID}) {
-    console.log('collection userID:', userID);
+
+    const [collection,setCollection] = useState([]);
+
 
     const submitHandler = e => {
         e.preventDefault();
         Logout();
     }
 
+    const getKeyButton = (params) => {
+        return (
+            <strong>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    style={{ marginLeft: 16 }}
+                    onClick={() => {
+                        console.log(params.row.col6);
+                    }}
+                >
+                    Get Key
+                </Button>
+            </strong>
+        )
+    }
+
     const columns = [
         {field: 'id', headerName: 'ID', width: 90},
         {
-            field: 'nftTitle',
+            field: 'title',
             headerName: 'Title',
             width: 300,
         },
         {
-            field: 'nftUrl',
+            field: 'url',
             headerName: 'URL',
-            width: 1400,
+            width: 300,
         },
+        {   field:"lol",
+            type: "buttons",
+            buttons: [{
+                name: "save",
+                cssClass: "my-class"
+            }],
+        }
     ];
 
-    // Placeholder data to be replaced with actual data from the database
-    const rows = [
-        {
-            id: 1,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 2,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 3,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 4,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 5,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 6,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 7,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 8,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 9,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 10,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 11,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 12,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 13,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 14,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id: 15,
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftUrl: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-    ];
+    useEffect(() => {
+        const api = new API();
+        async function getUserNfts() {
+            const collectionJSONString = await api.getUserNfts(userID);
+            setCollection(collectionJSONString);
+            console.log(collectionJSONString);
+        }
+        getUserNfts();
+    }, []);
+
+
 
     return (
         <Fragment>
@@ -138,7 +103,8 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                 </Button>
             </Box>
             <DataGrid
-                rows={rows}
+
+                rows={collection}
                 columns={columns}
                 pageSize={10}
                 autoHeight={true}
