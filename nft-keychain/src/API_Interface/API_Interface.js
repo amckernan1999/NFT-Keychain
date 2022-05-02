@@ -22,6 +22,7 @@ const AxiosConfigured = () => {
 const axiosAgent = AxiosConfigured();
 
 export default class APIInterface {
+
     async getUserInfo(userName, userPassword) {
         console.log('getuserinfo');
         return axiosAgent.get(`login/${userName}/${userPassword}`)
@@ -61,6 +62,17 @@ export default class APIInterface {
                     error,
                     user: undefined
                  }));
+    }
+
+    async getUserNfts(userID){
+        console.log('getUserNfts');
+        return axiosAgent.get(`collection/${userID}`)
+            .then(userInfo => userInfo.data)
+            .catch(error => (
+                {
+                    error,
+                    user: undefined
+                }));
     }
 
     

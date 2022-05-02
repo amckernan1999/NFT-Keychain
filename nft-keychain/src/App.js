@@ -12,6 +12,8 @@ function App() {
   const [user, setUser] = useState({name: ""});
   const [error, setError] = useState("");
 
+
+
   const CreateAccount = details => {
     console.log('create account', details);
 
@@ -92,36 +94,56 @@ function App() {
     console.log("Logout");
   }
 
-    const  SelectDevice = async () => {
-        console.log("entered select");
+  let writer;
+  let port;
+  const encoder = new TextEncoder();
 
+  const  SelectDevice = async () => {
+        console.log("entered select");
 
         if ("serial" in navigator) {
 
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: 115200 });
             writer = port.writable.getWriter();
+            await writer.write(encoder.encode("begin"));
 
-            //await writer.write()
-            // The Web Serial API is supported.
         }
-    }
+        else{console.log("Browser does not support serial transfer");}
+  }
 
-    let writer;
-    let port;
-    const PUSH = new Uint8Array([112, 117, 115, 104]);
-    const PULL = new Uint8Array([112, 117, 108, 108]);
-    const REMOVE = new Uint8Array([114, 101, 109, 111, 118, 101]);
+
 
     const Transfer = async () => {
-        console.log("entered transfer");
-        await writer.write(PUSH);
+
+      console.log(port);
+      if(port === undefined)
+      {
+          await SelectDevice();
+      }
+
+      const encoder = new TextEncoder()
+      const  sampleTitleKey = "Nft Title : 7cSSrwS21MLPFYHgtFvLpg==";
+      console.log("entered transfer");
+      await writer.write(encoder.encode("push"));
+      await writer.write(encoder.encode(sampleTitleKey));
+      console.log("sent" + sampleTitleKey);
+      await writer.write(encoder.encode("pretend image"));
+
     }
 
-    const RemoveFromKeychain = async () => {
-        console.log("entered remove");
-        await writer.write(PUSH);
+    const Retrieve = async () => {
+        console.log("entered retrieve");
+        await writer.write(encoder.encode("pull"));
     }
+
+    const Remove = async (nftTitle) => {
+        console.log("entered remove");
+        await writer.write(encoder.encode("remove"));
+        await writer.write(encoder.encode(nftTitle));
+    }
+
+
 
   if (b === "CREATE ACCOUNT") {
     return (

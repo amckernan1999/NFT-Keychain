@@ -1,14 +1,17 @@
-import React from 'react';
+
+import React, {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import '../styles.css';
+import API from "../API_Interface/API_Interface";
 import Modal from '../Modal';
 
 function Collections({Logout, SelectDevice, Transfer, error, userID}) {
     console.log('collection userID:', userID);
 
     const [isOpen, setIsOpen] = React.useState(false);
+    const [collection,setCollection] = useState([]);
 
     const submitHandler = e => {
         e.preventDefault();
@@ -23,7 +26,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                     color="primary"
                     size="medium"
                     onClick={() => {
-                        navigator.clipboard.writeText(params.row.nftKey).then(r => {console.log('Copied key to clipboard: ', params.row.nftKey);});
+                        navigator.clipboard.writeText("Hello").then(r => {console.log('Copied key to clipboard: ', "hello");});
                     }}
                 >GET KEY
                 </Button>
@@ -33,7 +36,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
 
     const columns = [
         {field: 'id', headerName: '', width: '50', disableClickEventBubbling: true,},
-        {field: 'image', headerName: '', width: 240, height: 240, disableColumnFilter: true, disableClickEventBubbling: true,
+        {field: 'url', headerName: '', width: 240, height: 240, disableColumnFilter: true, disableClickEventBubbling: true,
             renderCell: (params)=>{
                 return (
                     <div>
@@ -42,7 +45,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                 )}
             },
         {
-            field: 'nftTitle',
+            field: 'title',
             headerName: 'Title',
             headerAlign: 'center',
             width: 300,
@@ -60,99 +63,19 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         },
     ];
 
-    // Placeholder data to be replaced with actual data from the database
-    const rows = [
-        {
-            id:1,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:2,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:3,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:4,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:5,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:6,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:7,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:8,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:9,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:10,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:11,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:12,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:13,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:14,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-        {
-            id:15,
-            image: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600',
-            nftTitle: 'Bored Ape Yacht Club #5465',
-            nftKey: 'https://lh3.googleusercontent.com/Czn9y9yAUpvuI6SGoVSnNe29_kZ84Ey_9saCrdpA7a5j2_8IWlUFSBM3_GMkjBPmbG8AS1jWtrzgQG4nCsyAlR_VtEI0fXMeKD8ILA=w600'
-        },
-    ];
+
+    useEffect(() => {
+        const api = new API();
+        async function getUserNfts() {
+            const collectionJSONString = await api.getUserNfts(userID);
+            setCollection(collectionJSONString);
+            console.log(collectionJSONString);
+        }
+        getUserNfts();
+    }, []);
+
+
+
 
     return (
         <div style={{height: '100%', width: '100%'}}>
@@ -165,12 +88,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                 </Button>
                 <Modal open={isOpen} onClose={() => setIsOpen(false)}>
                 </Modal>
-                <Button
-                    variant="contained"
-                    size="large"
-                    onClick={SelectDevice}
-                >SELECT USB
-                </Button>
                 <Button
                     variant="contained"
                     size="large"
@@ -194,7 +111,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                     <DataGrid
                         sx={{mt: '4.3%'}}
                         rowHeight={240}
-                        rows={rows}
+                        rows={collection}
                         rowsPerPageOptions={[5, 10, 25, 100]}
                         columns={columns}
                         autoHeight={false}
