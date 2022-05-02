@@ -89,8 +89,10 @@ function App() {
   }
 
   const Logout = () => {
+    const api = new API();
     setUser({name: "", password: ""});
-    setError("")
+    setError("");
+    setUserID("");
     console.log("Logout");
   }
 
