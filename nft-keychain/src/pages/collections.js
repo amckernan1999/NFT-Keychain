@@ -6,8 +6,29 @@ import { DataGrid } from '@mui/x-data-grid';
 import '../styles.css';
 import API from "../API_Interface/API_Interface";
 import Modal from '../Modal';
+import axios from 'axios';
 
 function Collections({Logout, SelectDevice, Transfer, error, userID}) {
+    const AxiosConfigured = () => {
+        axios.defaults.baseURL = `http://localhost:3001`;
+        axios.defaults.withCredentials = false;
+        return axios;
+    };
+    const axiosAgent = AxiosConfigured();
+
+    // calls the web scraper
+    const add_nft = () => {
+        let url = "https://foundation.app/@spasi___sohrani/GPSG/15" // url input from add nft button goes here
+        url = url.replaceAll('/', '%2F');
+    
+        axiosAgent.get(`/web_scraper/${url}`)
+            .then(nft => nft.data) // this should be the nft title
+            .catch(error => (console.log(error)));
+    }
+    // add_nft();
+
+
+
     console.log('collection userID:', userID);
 
     const [isOpen, setIsOpen] = React.useState(false);

@@ -7,6 +7,227 @@ const puppeteer = require('puppeteer');
 const jimp = require('jimp');
 const fs = require('fs');
 
+const express = require('express');
+const cors = require('cors');
+const rateLimit = require("express-rate-limit")
+
+const app = express();
+app.use(cors({
+    credentials: true,
+  }));
+
+const limiter = rateLimit({
+  max: 1
+});
+app.use(limiter);
+// limits 1 request at a time
+// prevents every button press calling the web scraper before the button has functionality
+
+const port = 3001; // port that web_scraper listens on, needs to be different from db port
+
+app.get('/web_scraper/:urlInput', (req, res) => {
+  console.log('req:', req.params.urlInput);
+
+  console.log('web scraper starting');
+  let t = web_scraper(req.params.urlInput)
+  console.log('web sraper returns:', t);
+  console.log('after web scraper call');
+
+  res.send(t);
+})
+
+app.listen(port, function(err) {
+  if(err){
+     console.log(err);
+     } else {
+     console.log("web scraper listening on:", port);
+  }
+});
+
+async function remove_image(image) {
+  fs.stat('./temp_images/' + image, function (err, stats) {
+    if (err) {
+      return console.error(err);
+  }
+  fs.unlink('./temp_images/' + image,function(err){
+    if(err) {
+      return console.log(err);
+    }
+    // console.log(image, 'deleted from temp images');
+  });  
+  });
+}
+
+async function resize_image(image_file) {
+  // finding all the files that need to be resized
+  // const image_files = fs.readdirSync("./temp_images/");
+
+  // for (let i = 0; i < image_files.length; i++) {
+    // if (image_files[i] === ".gitignore") {
+    //   i++;
+    // }
+    let image_dimensions = sizeOf("./temp_images/" + image_file)
+    
+    let m = Math.max(image_dimensions.width, image_dimensions.height) / 240;
+    let newW = Math.floor(image_dimensions.width/m);
+    let newH = Math.floor(image_dimensions.height/m);
+
+    if (newW < 240) {
+      newW = 240;
+    }
+    if (newH < 240) {
+      newH = 240;
+    }
+    
+    let image = await jimp.read("./temp_images/" + image_file);
+    image.resize(newW, newH);
+    // await image.quality(100);
+    await image.writeAsync("./images/" + image_file);
+  // }
+}
+
+async function grab_image(url, title) {
+  const file_path = "./temp_images/" + title + ".png";
+
+  const response = await axios({
+    url,
+    method: 'GET',
+    responseType: 'stream'
+  });
+
+  return new Promise((resolve, reject) => {
+    response.data.pipe(fs.createWriteStream(file_path))
+                .on('error', reject)
+                .on('error', () => console.log('error downloading image'))
+                .once('close', () => resolve(file_path));
+  });
+}
+
+function web_scraper(url_input) {
+  console.log('in web scraper with url:', url_input);
+  let image_url;
+  let image_title;
+
+  (async () => {
+      const browser = await puppeteer.launch({
+          args: ['--user-agent=<user_agent_string>',]
+      }).catch((err) => {
+          console.log('launching browser err:', err);
+      }).then(
+          console.log('launching browser')
+      );
+
+
+      const page = await browser.newPage()
+      .catch((err) => {
+          console.log('new page err:', err);
+      }).then(
+          console.log('a page opens')
+      );
+      
+      try {
+          console.log('loading:', url_input);
+
+          await page.goto(url_input, {timeout: 100000});
+          let bodyHTML = await page.evaluate(() => document.body.innerHTML);
+
+          console.log('loading cheerio');
+
+          let $ = cheerio.load(bodyHTML);
+
+          if (url_input.slice(0, 22) === "https://foundation.app") {
+              image_url = $('.fullscreen > img').attr('src');  // scraping for the nft url
+              image_title = $('.fullscreen > img').attr('alt');  // scraping for the nft title
+              if (image_url === undefined) {  // if a url cannot be found we ignore it and send an error message so we know what went wrong
+                console.log('failed to find image at', url_input);
+              } else {
+                console.log('successfully found something at', url_input)
+              }
+            }
+          
+            // rarible not working
+            else if (url_input.slice(0, 19) === "https://rarible.com") {
+              image_url = $('.sc-bdvvtL sc-gsDKAQ sc-jNHqnW ieSfBq bMYxVD > img').attr('src');
+              image_title = $('');
+              if (image_url === undefined) {
+                console.log('failed to find image at', url_input);
+              } else {
+                console.log('successfully found something at', url_input)
+              }
+            }
+
+            else if (url_input.slice(0, 23) === "https://makersplace.com") {
+              image_url = $('.image-wrp > img').attr('src');
+              image_title = $('#digital_media_title').text();
+              if (image_url === undefined) {
+                console.log('failed to find image at', url_input);
+              } else {
+                console.log('successfully found something at', url_input)
+              }
+            }
+
+            // mintable not working
+            else if (url_input.slice(0, 20) === "https://mintable.app") {
+              // Image_container__zulTR MediaGallery_previewImgCard__4WZRP
+              image_url = $(".Image_overlay__1+3kG > img").attr('src');
+              image_title = $('');
+              if (image_url === undefined) {
+                console.log('failed to find image at', url_input);
+              } else {
+                console.log('successfully found something at', url_input)
+              }
+            }
+
+            else if (url_input.slice(0, 22) === "https://knownorigin.io") {
+              image_url = $('.tile > div > div > div > div > section > figure > div > img').attr('src');
+              image_title = $('.is-size-3-mobile:last').text();
+              if (image_url === undefined) {
+                console.log('failed to find image at', url_input);
+              } else {
+                console.log('successfully found something at', url_input)
+              }
+            }
+
+            else if (url_input.slice(0, 18) === "https://opensea.io") {
+              image_url = $('.Image--image').attr('src');
+              // image_url = $('.AssetMedia--img').attr('src'); 
+              image_title = $('.item--title').attr('title');
+              if (image_url === undefined) {
+                console.log('failed to find image at', url_input);
+              } else {
+                console.log('successfully found something at', url_input)
+              }
+            }
+
+            else {
+              console.log('failed to load', url_input, 'unsupported website');
+            }
+      } catch(err) {
+          console.log(err);
+      }
+
+      await browser.close();
+      console.log("\nbrowser closed");
+      
+      // files can't have some characters in them
+      let pieces = image_title.split(':');
+      image_title = pieces.join('');
+      pieces = image_title.split('@');
+      image_title = pieces.join('');
+      pieces = image_title.split('.');
+      image_title = pieces.join('');
+
+      await grab_image(image_url, image_title);
+      await resize_image(image_title + ".png");
+      await remove_image(image_title + ".png");
+
+      return image_title;
+  })();
+}
+
+
+// please leave this until the web scraper is running well
+/*
 let browser_test_url = ["https://opensea.io/assets/matic/0x28009881f0ffe85c90725b8b02be55773647c64a/20"]
 let browser_test_urls = ["https://foundation.app/@spasi___sohrani/GPSG/15",
                           "https://rarible.com/token/0x57a204aa1042f6e66dd7730813f4024114d74f37:1700", // not working
@@ -193,3 +414,4 @@ function webs(urls) {
 }
 
 webs(browser_test_urls);
+*/
