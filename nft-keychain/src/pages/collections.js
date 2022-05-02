@@ -118,11 +118,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                 <Button
                     variant="contained"
                     size="large"
-                >SETTINGS
-                </Button>
-                <Button
-                    variant="contained"
-                    size="large"
                     onClick={Logout}
                 >LOGOUT
                 </Button>
