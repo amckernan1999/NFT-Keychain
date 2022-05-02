@@ -31,21 +31,19 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
 
     console.log('collection userID:', userID);
 
-    const [isOpen, setIsOpen] = React.useState(false);
-    const [collection,setCollection] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const [collection, setCollection] = useState([]);
 
     const submitHandler = e => {
         e.preventDefault();
         Logout();
     };
 
-    const renderGetKeyButton = (params) => {
+    const renderGetKeyButton = () => {
         return (
             <strong>
                 <Button
-                    variant="contained"
-                    color="primary"
-                    size="medium"
+                    className='button'
                     onClick={() => {
                         navigator.clipboard.writeText("Hello").then(r => {console.log('Copied key to clipboard: ', "hello");});
                     }}
@@ -56,8 +54,8 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
     }
 
     const columns = [
-        {field: 'id', headerName: '', width: '50', disableClickEventBubbling: true,},
-        {field: 'url', headerName: '', width: 240, height: 240, disableColumnFilter: true, disableClickEventBubbling: true,
+        {field: 'id', hide: true, width: '50', disableClickEventBubbling: true,},
+        {field: 'url', headerName: 'NFT', headerAlign: 'center', width: 240, height: 240, disableColumnFilter: true, disableClickEventBubbling: true,
             renderCell: (params)=>{
                 return (
                     <div>
@@ -69,6 +67,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
             field: 'title',
             headerName: 'Title',
             headerAlign: 'center',
+            align: 'center',
             width: 300,
             disableClickEventBubbling: true,
         },
@@ -84,7 +83,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         },
     ];
 
-
     useEffect(() => {
         const api = new API();
         async function getUserNfts() {
@@ -95,13 +93,11 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         getUserNfts();
     }, []);
 
-
-
-
     return (
-        <div style={{height: '100%', width: '100%'}}>
+        <div className='container'>
             <Box display="flex" justifyContent="space-evenly" flexDirection="row" alignItems="center" width="100%" mt={2} top={"0"} position={"absolute"}>
                 <Button
+                    className='button'
                     variant="contained"
                     size="large"
                     onClick={() => setIsOpen(true)}
@@ -110,21 +106,30 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                 <Modal open={isOpen} onClose={() => setIsOpen(false)}>
                 </Modal>
                 <Button
+                    className='button'
                     variant="contained"
                     size="large"
                     onClick={Transfer}
                 >TRANSFER
                 </Button>
                 <Button
+                    className='button'
+                    variant="contained"
+                    size="large"
+                >DELETE
+                </Button>
+                <Button
+                    className='button'
                     variant="contained"
                     size="large"
                     onClick={Logout}
                 >LOGOUT
                 </Button>
             </Box>
-            <div style={{height: "91%", width: "100%", display: 'flex'}}>
+            <div style={{height: '91%', width: '100%', display: 'flex'}}>
                 <div style={{flexGrow: '1'}}>
                     <DataGrid
+                        style={{backgroundColor: '#9eadbc', borderColor: '#000000'}}
                         sx={{mt: '4.3%'}}
                         rowHeight={240}
                         rows={collection}

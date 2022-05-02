@@ -127,39 +127,6 @@ form .form-inner input[type="submit"]:hover, .collections button:hover {
     background-position: 100% 0;
 }
 
-.collections {
-    align-items: center;
-    justify-content: center;
-    width: 85%;
-    height: 90%;
-    background-color: white;
-    padding: 15px 30px;
-}
-
-.collections h2 {
-    color: black;
-    font-size: 36px;
-    font-weight: 1000;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.collections button {
-    padding: 10px 15px;
-    border-radius: 8px;
-    background-color: cyan;
-    background-size: 200%;
-    background-position: 0;
-    transition: 0.1s;
-    color: black;
-    font-size: 18px;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: center;
-    display: inline-block;
-    margin-left: 250px;
-}
-
 form .form-inner .error-message {
     color: red;
     font-size: 18px;
@@ -170,6 +137,8 @@ form .form-inner .error-message {
 .nft {
     height: 240px;
     width: 240px;
+    object-fit: contain;
+    display: block;
 }
 
 .modal {
@@ -188,4 +157,27 @@ form .form-inner .error-message {
     bottom: 0;
     background-color: rgba(0, 0, 0, .7);
     z-index: 1000;
+}
+
+.container {
+    height: 100%;
+    width: 100%;
+    background-color: #43525f;
+}
+
+.container .button{
+    display: inline-block;
+    background-color: cyan;
+    background-position: 0;
+    transition: 0.1s;
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    align-items: center;
+}
+
+.container .button:hover {
+    background-position: 100% 0;
+    background-color: white;
 }
