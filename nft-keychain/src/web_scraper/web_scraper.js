@@ -7,6 +7,9 @@ const puppeteer = require('puppeteer');
 const jimp = require('jimp');
 const fs = require('fs');
 
+
+import API from './API_Interface/API_Interface.js';
+
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require("express-rate-limit")
