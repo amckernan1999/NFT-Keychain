@@ -1,3 +1,4 @@
+
 import React, {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -11,7 +12,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
 
     const [isOpen, setIsOpen] = React.useState(false);
     const [collection,setCollection] = useState([]);
-
 
     const submitHandler = e => {
         e.preventDefault();
@@ -63,6 +63,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         },
     ];
 
+
     useEffect(() => {
         const api = new API();
         async function getUserNfts() {
@@ -72,6 +73,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         }
         getUserNfts();
     }, []);
+
 
 
 
