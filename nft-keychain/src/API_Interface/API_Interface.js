@@ -65,13 +65,23 @@ export default class APIInterface {
     }
 
     async getUserNfts(userID){
-        console.log('getUserNfts');
+        console.log('getUserNfts a');
         return axiosAgent.get(`collection/${userID}`)
             .then(userInfo => userInfo.data)
             .catch(error => (
                 {
                     error,
                     user: undefined
+                }));
+    }
+
+    async putUserNft(url, title, path, userID){
+        console.log('putUserNft 1');
+        return axiosAgent.get(`collection/${url}/${title}/${path}/${userID}`)
+            .then(userInfo => userInfo.data)
+            .catch(error => (
+                {
+                    error,
                 }));
     }
 

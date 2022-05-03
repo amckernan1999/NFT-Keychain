@@ -8,8 +8,6 @@ const jimp = require('jimp');
 const fs = require('fs');
 
 
-import API from './API_Interface/API_Interface.js';
-
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require("express-rate-limit")
@@ -28,8 +26,8 @@ app.use(limiter);
 
 const port = 3001; // port that web_scraper listens on, needs to be different from db port
 
-app.get('/web_scraper/:urlInput//titleInput', (req, res) => {
-  console.log('req:', req.params.urlInput);
+app.get('/web_scraper/:urlInput/:titleInput', (req, res) => {
+  console.log('req:', req.params.urlInput, req.params.titleInput);
 
   console.log('web scraper starting');
   web_scraper(req.params.urlInput, req.params.titleInput)
@@ -223,6 +221,7 @@ function web_scraper(url_input, title_input) {
       await resize_image(image_title + ".png"); // resizes and saves image in images
       await remove_image(image_title + ".png"); // deletes the full size image from temp_images
   })();
+  return;
 }
 
 
