@@ -1,12 +1,25 @@
 import React, {Fragment} from 'react'
 import './styles.css'
 
-export default function Modal({ open, onClose }) {
+export default function  Modal({ open, onClose, userID, nftDetails, setNftDetails, add_nft}) {
     if (!open) return null
 
     const submitHandler = e => {
         // console.log('submit handler', details);
         e.preventDefault();
+
+        if(open){
+            console.log("submit");
+            setNftDetails(
+                {
+                    url: document.getElementById('url').value,
+                    title: document.getElementById('title').value,
+                    key: document.getElementById('key').value
+                });
+
+                console.log(nftDetails.url, nftDetails.title, nftDetails.key); 
+                add_nft(nftDetails.url, nftDetails.title)
+        }
     }
 
     return (
