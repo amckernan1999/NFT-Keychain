@@ -18,14 +18,13 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
 
     // calls the web scraper
     const add_nft = () => {
+        let temp_title = "crab attack" // temp until the add nft button takes a title
         let url = "https://foundation.app/@spasi___sohrani/GPSG/15" // url input from add nft button goes here
         url = url.replaceAll('/', '%2F');
     
-        axiosAgent2.get(`http://localhost:3001/web_scraper/${url}`)
-            .then(nft => nft.data) // this should be the nft title
-            .catch(error => (console.log(error)));
+        axiosAgent2.get(`http://localhost:3001/web_scraper/${url}/${temp_title}`)
     }
-    add_nft();
+    // add_nft();
 
 
 
