@@ -221,6 +221,7 @@ function web_scraper(url_input, title_input) {
       await resize_image(image_title + ".png"); // resizes and saves image in images
       await remove_image(image_title + ".png"); // deletes the full size image from temp_images
   })();
+  return;
 }
 
 

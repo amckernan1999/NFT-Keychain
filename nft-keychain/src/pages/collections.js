@@ -19,18 +19,37 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
     const axiosAgent2 = AxiosConfiguration();
 
     // calls the web scraper
-    const add_nft = (nft_url, nft_title) => {
-        console.log('add_nft:', nft_title, nft_url);
-        let temp_title = "crab attack" // temp until the add nft button takes a title
+    const add_nft = (nft_url, nft_title, nft_key) => {
         let url = "https://foundation.app/@spasi___sohrani/GPSG/15" // url input from add nft button goes here
         url = nft_url.replaceAll('/', '%2F');
+        let resized_image_path = '../web_scraper/images/'+nft_title+'.png'
+        resized_image_path = resized_image_path.replaceAll('/', '%2F');
 
-        console.log('http://localhost:3001/web_scraper/' + url + '/' + nft_title);
+        console.log('add_nft:', nft_title, nft_url, nft_key, resized_image_path);
+        console.log('url:', url);
     
         axiosAgent2.get(`http://localhost:3001/web_scraper/${url}/${nft_title}`)
-    }
-    // add_nft();
 
+        // do something security related with the key here i supposed
+
+        const api = new API();
+        async function putUserNft() {
+          api.putUserNft(url, nft_title, resized_image_path, userID)
+              .then( () => {
+                console.log('nft titled', nft_title, 'added to users collection');
+                // maybe can add some error checking later
+              });
+        }
+        putUserNft();
+    }
+
+    // const api = new API();
+    // async function getUserNfts() {
+    //     const collectionJSONString = await api.getUserNfts(userID);
+    //     setCollection(collectionJSONString);
+    //     console.log(collectionJSONString);
+    // }
+    // getUserNfts();
 
 
     console.log('collection userID:', userID);
