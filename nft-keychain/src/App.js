@@ -5,6 +5,7 @@ import Collections from "./pages/collections";
 import AccountCreation from "./pages/AccountCreation";
 import API from './API_Interface/API_Interface.js';
 
+
 function App() {
 
   const [userID, setUserID] = useState("");
@@ -95,6 +96,7 @@ function App() {
   }
 
   let writer;
+  let reader;
   let port;
   const encoder = new TextEncoder();
 
@@ -106,6 +108,7 @@ function App() {
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: 115200 });
             writer = port.writable.getWriter();
+            reader = port.readable.getReader();
             await writer.write(encoder.encode("begin"));
 
         }
@@ -115,8 +118,6 @@ function App() {
 
 
     const Transfer = async () => {
-
-      console.log(port);
       if(port === undefined)
       {
           await SelectDevice();
@@ -132,9 +133,16 @@ function App() {
 
     }
 
-    const Retrieve = async () => {
+    const Retrieve = async (nftID) => {
+
+        if(port === undefined)
+        {
+            await SelectDevice();
+        }
+
         console.log("entered retrieve");
         await writer.write(encoder.encode("pull"));
+        return("dog");
     }
 
     const Remove = async (nftTitle) => {
@@ -156,7 +164,8 @@ function App() {
     return (
       <div className="App">
         {(user.name !== "") ? (
-            <Collections Logout={Logout} SelectDevice={SelectDevice} Transfer={Transfer} error={error} userID={userID}/>
+            <Collections Logout={Logout} SelectDevice={SelectDevice} Transfer={Transfer} Retrieve={Retrieve}
+                         Remove={Remove} error={error} userID={userID} port={port}/>
         ) : (
             <UserLogin Login={Login} error={error}/>
         )}

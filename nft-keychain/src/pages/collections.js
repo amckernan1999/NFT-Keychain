@@ -6,27 +6,50 @@ import '../styles.css';
 import API from "../API_Interface/API_Interface";
 import Modal from '../Modal';
 
-function Collections({Logout, SelectDevice, Transfer, error, userID}) {
+function Collections({Logout, SelectDevice, Transfer, Retrieve, userID}) {
+
+    const submitHandler = () =>{
+        console.log("submit");
+    }
     console.log('collection userID:', userID);
 
     const [isOpen, setIsOpen] = React.useState(false);
     const [collection,setCollection] = useState([]);
+    const [nftDetails,setNftDetails ]= useState({title:'',url:'',key:''});
 
 
-    const submitHandler = e => {
-        e.preventDefault();
-        Logout();
-    };
+    useEffect(() => {
+        const api = new API();
+        async function getUserNfts() {
+            const collectionJSONString = await api.getUserNfts(userID);
+            setCollection(collectionJSONString);
+            console.log(collectionJSONString);
+        }
+        getUserNfts();
+    }, []);
 
-    const renderGetKeyButton = (params) => {
+    useEffect( () => {
+        const api = new API();
+        async function putUserNfts() {
+            await api.putUserNfts(nftDetails.url,nftDetails.title,nftDetails.url,userID);
+            console.log(nftDetails.url,nftDetails.title,nftDetails.url,userID);
+        }
+        putUserNfts();
+
+    }, []);
+
+    const renderGetKeyButton =  (params) => {
         return (
             <strong>
                 <Button
                     variant="contained"
                     color="primary"
                     size="medium"
-                    onClick={() => {
-                        navigator.clipboard.writeText("Hello").then(r => {console.log('Copied key to clipboard: ', "hello");});
+                    onClick={async () => {
+                        const key = await Retrieve();
+                        navigator.clipboard.writeText(key).then(r => {
+                            console.log('Copied key to clipboard: ', key);
+                        });
                     }}
                 >GET KEY
                 </Button>
@@ -50,6 +73,21 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
             headerAlign: 'center',
             width: 300,
             disableClickEventBubbling: true,
+
+        },
+        {
+            field: 'path',
+            headerName: 'Link',
+            headerAlign: 'center',
+            width: 300,
+            disableClickEventBubbling: true,
+            renderCell: (params)=>{
+
+                return (
+                     <a href={"http://google.com"}>Link to Collection</a>
+
+                )}
+
         },
         {
             field: 'nftKey',
@@ -63,15 +101,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         },
     ];
 
-    useEffect(() => {
-        const api = new API();
-        async function getUserNfts() {
-            const collectionJSONString = await api.getUserNfts(userID);
-            setCollection(collectionJSONString);
-            console.log(collectionJSONString);
-        }
-        getUserNfts();
-    }, []);
 
 
 
@@ -84,18 +113,13 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
                     onClick={() => setIsOpen(true)}
                 >ADD NFT
                 </Button>
-                <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+                <Modal open={isOpen} onClose={() => setIsOpen(false)} nftDetails={nftDetails} setNftDetails={setNftDetails} submitHandler={submitHandler}>
                 </Modal>
                 <Button
                     variant="contained"
                     size="large"
                     onClick={Transfer}
                 >TRANSFER
-                </Button>
-                <Button
-                    variant="contained"
-                    size="large"
-                >SETTINGS
                 </Button>
                 <Button
                     variant="contained"

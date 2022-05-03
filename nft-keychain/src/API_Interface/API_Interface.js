@@ -75,5 +75,16 @@ export default class APIInterface {
                 }));
     }
 
+    async putUserNfts(userID){
+        console.log('putUserNfts');
+        return axiosAgent.get(`collection/${userID}/addNFT`)
+            .then(userInfo => userInfo.data)
+            .catch(error => (
+                {
+                    error,
+                    user: undefined
+                }));
+    }
+
     
 }
