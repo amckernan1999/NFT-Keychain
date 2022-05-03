@@ -28,12 +28,11 @@ app.use(limiter);
 
 const port = 3001; // port that web_scraper listens on, needs to be different from db port
 
-app.get('/web_scraper/:urlInput', (req, res) => {
+app.get('/web_scraper/:urlInput//titleInput', (req, res) => {
   console.log('req:', req.params.urlInput);
 
   console.log('web scraper starting');
-  let t = web_scraper(req.params.urlInput)
-  console.log('web sraper returns:', t);
+  web_scraper(req.params.urlInput, req.params.titleInput)
   console.log('after web scraper call');
 
   res.send(t);
@@ -106,10 +105,10 @@ async function grab_image(url, title) {
   });
 }
 
-function web_scraper(url_input) {
+function web_scraper(url_input, title_input) {
   console.log('in web scraper with url:', url_input);
   let image_url;
-  let image_title;
+  let image_title = title_input;
 
   (async () => {
       const browser = await puppeteer.launch({
@@ -140,7 +139,7 @@ function web_scraper(url_input) {
 
           if (url_input.slice(0, 22) === "https://foundation.app") {
               image_url = $('.fullscreen > img').attr('src');  // scraping for the nft url
-              image_title = $('.fullscreen > img').attr('alt');  // scraping for the nft title
+              // image_title = $('.fullscreen > img').attr('alt');  // scraping for the nft title
               if (image_url === undefined) {  // if a url cannot be found we ignore it and send an error message so we know what went wrong
                 console.log('failed to find image at', url_input);
               } else {
@@ -151,7 +150,7 @@ function web_scraper(url_input) {
             // rarible not working
             else if (url_input.slice(0, 19) === "https://rarible.com") {
               image_url = $('.sc-bdvvtL sc-gsDKAQ sc-jNHqnW ieSfBq bMYxVD > img').attr('src');
-              image_title = $('');
+              // image_title = $('');
               if (image_url === undefined) {
                 console.log('failed to find image at', url_input);
               } else {
@@ -161,7 +160,7 @@ function web_scraper(url_input) {
 
             else if (url_input.slice(0, 23) === "https://makersplace.com") {
               image_url = $('.image-wrp > img').attr('src');
-              image_title = $('#digital_media_title').text();
+              // image_title = $('#digital_media_title').text();
               if (image_url === undefined) {
                 console.log('failed to find image at', url_input);
               } else {
@@ -173,7 +172,7 @@ function web_scraper(url_input) {
             else if (url_input.slice(0, 20) === "https://mintable.app") {
               // Image_container__zulTR MediaGallery_previewImgCard__4WZRP
               image_url = $(".Image_overlay__1+3kG > img").attr('src');
-              image_title = $('');
+              // image_title = $('');
               if (image_url === undefined) {
                 console.log('failed to find image at', url_input);
               } else {
@@ -183,7 +182,7 @@ function web_scraper(url_input) {
 
             else if (url_input.slice(0, 22) === "https://knownorigin.io") {
               image_url = $('.tile > div > div > div > div > section > figure > div > img').attr('src');
-              image_title = $('.is-size-3-mobile:last').text();
+              // image_title = $('.is-size-3-mobile:last').text();
               if (image_url === undefined) {
                 console.log('failed to find image at', url_input);
               } else {
@@ -194,7 +193,7 @@ function web_scraper(url_input) {
             else if (url_input.slice(0, 18) === "https://opensea.io") {
               image_url = $('.Image--image').attr('src');
               // image_url = $('.AssetMedia--img').attr('src'); 
-              image_title = $('.item--title').attr('title');
+              // image_title = $('.item--title').attr('title');
               if (image_url === undefined) {
                 console.log('failed to find image at', url_input);
               } else {
@@ -213,18 +212,16 @@ function web_scraper(url_input) {
       console.log("\nbrowser closed");
       
       // files can't have some characters in them
-      let pieces = image_title.split(':');
-      image_title = pieces.join('');
-      pieces = image_title.split('@');
-      image_title = pieces.join('');
-      pieces = image_title.split('.');
-      image_title = pieces.join('');
+      // let pieces = image_title.split(':');
+      // image_title = pieces.join('');
+      // pieces = image_title.split('@');
+      // image_title = pieces.join('');
+      // pieces = image_title.split('.');
+      // image_title = pieces.join('');
 
-      await grab_image(image_url, image_title);
-      await resize_image(image_title + ".png");
-      await remove_image(image_title + ".png");
-
-      return image_title;
+      await grab_image(image_url, image_title); // grabs full size image and places it in temp_images
+      await resize_image(image_title + ".png"); // resizes and saves image in images
+      await remove_image(image_title + ".png"); // deletes the full size image from temp_images
   })();
 }
 
