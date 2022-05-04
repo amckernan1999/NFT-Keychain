@@ -43,14 +43,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         putUserNft();
     }
 
-    // const api = new API();
-    // async function getUserNfts() {
-    //     const collectionJSONString = await api.getUserNfts(userID);
-    //     setCollection(collectionJSONString);
-    //     console.log(collectionJSONString);
-    // }
-    // getUserNfts();
-
 
     console.log('collection userID:', userID);
 
