@@ -20,7 +20,7 @@ app.use(cors({
 const limiter = rateLimit({
   max: 1
 });
-app.use(limiter);
+// app.use(limiter);
 // limits 1 request at a time
 // prevents every button press calling the web scraper before the button has functionality
 
@@ -82,7 +82,8 @@ async function resize_image(image_file) {
     let image = await jimp.read("./temp_images/" + image_file);
     image.resize(newW, newH);
     // await image.quality(100);
-    await image.writeAsync("./images/" + image_file);
+    // await image.writeAsync("./images/" + image_file);
+    await image.writeAsync("../../public/images/" + image_file);
   // }
 }
 

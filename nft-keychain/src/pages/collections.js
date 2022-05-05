@@ -8,6 +8,22 @@ import API from "../API_Interface/API_Interface";
 import Modal from '../Modal';
 import axios from 'axios';
 
+
+
+// importing all of the images the web scraper has pulled
+function importAll(r) {
+    let image_files = {};
+    r.keys().map((item, index) => { image_files[item.replace('./', '')] = r(item); });
+    console.log('len:', Object.keys(image_files).length);
+    return image_files;
+}
+const image_files = importAll(require.context('../web_scraper/images', false, /\.(png)$/));
+console.log('len:', Object.keys(image_files).length);
+console.log(image_files);
+// console.log(image_files['123.png']);
+
+
+
 function Collections({Logout, SelectDevice, Transfer, error, userID}) {
     const [nftDetails,setNftDetails ]= useState({title:'',url:'',key:''});
 
@@ -22,7 +38,12 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
     const add_nft = (nft_url, nft_title, nft_key) => {
         let url = "https://foundation.app/@spasi___sohrani/GPSG/15" // url input from add nft button goes here
         url = nft_url.replaceAll('/', '%2F');
-        let resized_image_path = '../web_scraper/images/'+nft_title+'.png'
+
+
+        let resized_image_path = nft_title + ".png";
+        // let resized_image_path = '/' + nft_title + '.png';
+
+
         resized_image_path = resized_image_path.replaceAll('/', '%2F');
 
         console.log('add_nft:', nft_title, nft_url, nft_key, resized_image_path);
@@ -47,7 +68,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
     console.log('collection userID:', userID);
 
     const [isOpen, setIsOpen] = useState(false);
-    const [collection, setCollection] = useState([]);
+    const [collection, setCollection] = useState([], {});
 
     const submitHandler = e => {
         e.preventDefault();
@@ -68,16 +89,31 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         )
     }
 
+
+
+    // <img src={process.env.PUBLIC_URL + params}
+    // <img src={process.env.PUBLIC_URL + '/images/1.png'}
+    // <img src={image_files[params]}
+    // <img src={image_files['1.png']}
+    
+    const g = "51.png";
+
+    console.log('this', collection);
+    console.log('end');
+    console.log('that', image_files, image_files['11.png']);
+    console.log('end that');
+
     const columns = [
         {field: 'id', hide: true, width: '50', disableClickEventBubbling: true,},
-        {field: 'url', headerName: 'NFT', headerAlign: 'center', width: 240, height: 240, disableColumnFilter: true, disableClickEventBubbling: true,
+        {field: 'path', headerName: 'NFT', headerAlign: 'center', width: 240, height: 240, disableColumnFilter: true, disableClickEventBubbling: true,
             renderCell: (params)=>{
+                console.log('\nimage files', image_files, '\nparams', params,'\nimage files[paramms]', image_files[params.row], 'asdfa', '\nparams.row.path', params.row.path);
                 return (
                     <div>
-                        <img src={params.value} alt="nft" className="nft" />
+                        <img src={process.env.PUBLIC_URL + '/images/' + params.row.path} alt="nft" className="nft" />
                     </div>
-                )}
-            },
+            )}
+        },
         {
             field: 'title',
             headerName: 'Title',
