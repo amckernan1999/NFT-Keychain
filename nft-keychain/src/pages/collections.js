@@ -107,13 +107,13 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         {field: 'id', hide: true, width: '50', disableClickEventBubbling: true,},
         {field: 'path', headerName: 'NFT', headerAlign: 'center', width: 240, height: 240, disableColumnFilter: true, disableClickEventBubbling: true,
             renderCell: (params)=>{
-                console.log(image_files, params);
+                console.log('\nimage files', image_files, '\nparams', params,'\nimage files[paramms]', image_files[params.row], 'asdfa', '\nparams.row.path', params.row.path);
                 return (
                     <div>
-                        <img src={image_files[params]} alt="nft" className="nft" />
+                        <img src={process.env.PUBLIC_URL + '/images/' + params.row.path} alt="nft" className="nft" />
                     </div>
-                )}
-            },
+            )}
+        },
         {
             field: 'title',
             headerName: 'Title',
