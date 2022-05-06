@@ -31,19 +31,10 @@ function App() {
                 if( userInfo.status === "Success" ) {
                   console.log("Creating account")
                   
-
-
-                  console.log('\n\nencrypt');
                   ciphertext = crypto.AES.encrypt(details.password, 'thisshouldbeasecret');
                   _ciphertext = crypto.AES.decrypt(ciphertext.toString(), 'thisshouldbeasecret');
-                  console.log('_ciphertext.tostring(cryptoenc)', _ciphertext.toString(crypto.ENC));
-
-                  console.log('create account hashing');
-                  hash = crypto.SHA1(ciphertext) // 123 = 9844f81e1408f6ecb932137d33bed7cfdcf518a3
+                  hash = crypto.SHA1(ciphertext)
                   console.log(hash.toString());
-
-
-
 
                   api.createUserInfo(details.name, hash, 'create')
                   api.getUserID(details.name, 'a', 'b', 'get')
@@ -81,18 +72,10 @@ function App() {
           const api = new API();
           async function getUserInfo() {
 
-
-
-            console.log('\n\nencrypt');
             ciphertext = crypto.AES.encrypt(details.password, 'thisshouldbeasecret');
             _ciphertext = crypto.AES.decrypt(ciphertext.toString(), 'thisshouldbeasecret');
-            console.log('_ciphertext.tostring(cryptoenc)', _ciphertext.toString(crypto.ENC));
-
-            console.log('hashing');
-            hash = crypto.SHA1(ciphertext).toString() // 123 = 9844f81e1408f6ecb932137d33bed7cfdcf518a3
+            hash = crypto.SHA1(ciphertext).toString()
             console.log(hash.toString());
-
-
 
               api.getUserInfo(details.name, hash)
                   .then( userInfo => {
@@ -103,7 +86,7 @@ function App() {
                         name: details.name,
                         password: hash
                       });
-                      console.log('\n\n\nlogin set user as:', user)
+                      console.log('login set user as:', user)
                         
                     } else  {
                       console.log("Details do not match");
