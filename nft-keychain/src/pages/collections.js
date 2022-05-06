@@ -34,14 +34,15 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
         axiosAgent2.get(`http://localhost:3001/web_scraper/${url}/${nft_title}`)
 
         let nft_key_to_db = crypto.AES.encrypt(nft_key, user.password);
+        let nft_key_on_db_test = nft_key_to_db;
         nft_key_to_db = nft_key_to_db.toString().replaceAll('/', '%2F'); // this is what's send to the db to later be sent to the device with transfer button
 
 // this is the security stuff that should be added on get key
-        let nft_key_from_device = crypto.AES.decrypt(nft_key_to_db, user.password); 
-        // nft_key_to_db is what will be restored from the device with the get key button
+        let nft_key_from_device_test = crypto.AES.decrypt(nft_key_on_db_test, user.password); 
+        // nft_key_on_db_test is what will be restored from the device with the get key button
         // change the first variable, nft_key_to_db, to whatever you get back from the device
-        // nft_key_to_device.toString(crypto.enc.Utf8) is shown to user as their key
-        // console.log('returned nft key should be:', nft_key_from_device.toString(crypto.enc.Utf8));
+        // nft_key_to_device_test.toString(crypto.enc.Utf8) is shown to user as their key
+        console.log('returned nft key should be:', nft_key_from_device_test.toString(crypto.enc.Utf8));
 
         const api = new API();
         async function putUserNft() {
