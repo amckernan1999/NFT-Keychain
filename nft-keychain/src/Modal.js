@@ -9,7 +9,7 @@ export default function  Modal({ open, onClose, userID, nftDetails, setNftDetail
         e.preventDefault();
 
         if(open){
-            console.log("submit");
+            console.log("submit, modal");
             setNftDetails(
                 {
                     url: document.getElementById('url').value,
