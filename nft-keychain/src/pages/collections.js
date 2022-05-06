@@ -7,6 +7,7 @@ import '../styles.css';
 import API from "../API_Interface/API_Interface";
 import Modal from '../Modal';
 import axios from 'axios';
+import * as crypto from 'crypto-js';
 
 
 
@@ -14,21 +15,18 @@ import axios from 'axios';
 function importAll(r) {
     let image_files = {};
     r.keys().map((item, index) => { image_files[item.replace('./', '')] = r(item); });
-    console.log('len:', Object.keys(image_files).length);
     return image_files;
 }
-const image_files = importAll(require.context('../web_scraper/images', false, /\.(png)$/));
-console.log('len:', Object.keys(image_files).length);
-console.log(image_files);
-// console.log(image_files['123.png']);
+const image_files = importAll(require.context('../../public/images', false, /\.(png)$/));
 
 
 
-function Collections({Logout, SelectDevice, Transfer, error, userID}) {
-    const [nftDetails,setNftDetails ]= useState({title:'',url:'',key:''});
+function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
+    const [nftDetails, setNftDetails]= useState({title:'',url:'',key:''});
+    console.log('collection starts with user set as:', user);
+    console.log('nft details:', nftDetails);
 
     const AxiosConfiguration = () => {
-        // axios.defaults.baseURL = `http://localhost:3001`; // this sets axios default for both servers, we don't want that
         axios.defaults.withCredentials = false;
         return axios;
     };
@@ -36,22 +34,27 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
 
     // calls the web scraper
     const add_nft = (nft_url, nft_title, nft_key) => {
-        let url = "https://foundation.app/@spasi___sohrani/GPSG/15" // url input from add nft button goes here
-        url = nft_url.replaceAll('/', '%2F');
-
-
+        let url = nft_url.replaceAll('/', '%2F');
         let resized_image_path = nft_title + ".png";
-        // let resized_image_path = '/' + nft_title + '.png';
-
-
         resized_image_path = resized_image_path.replaceAll('/', '%2F');
-
-        console.log('add_nft:', nft_title, nft_url, nft_key, resized_image_path);
-        console.log('url:', url);
     
         axiosAgent2.get(`http://localhost:3001/web_scraper/${url}/${nft_title}`)
 
-        // do something security related with the key here i supposed
+
+
+
+        let nft_key_to_device = crypto.AES.encrypt(nft_key, user.password); 
+        // nft_key_ciphertext.toString() is sent to device
+        console.log('this should be stored on device:', nft_key_to_device.toString());
+
+        let nft_key_from_device = crypto.AES.decrypt(nft_key_to_device, user.password); 
+        // _nft_key_ciphertext is restored from device.
+        // change the first variable, nft_key_ciphertext.toString(), to whatever you get back from the device
+        // _nft_key_ciphertext.toString(crypto.enc.Utf8) is shown to user as their key
+        console.log('nft key:', nft_key_from_device.toString(crypto.enc.Utf8));
+
+
+        
 
         const api = new API();
         async function putUserNft() {
@@ -63,9 +66,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         }
         putUserNft();
     }
-
-
-    console.log('collection userID:', userID);
 
     const [isOpen, setIsOpen] = useState(false);
     const [collection, setCollection] = useState([], {});
@@ -89,25 +89,10 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         )
     }
 
-
-
-    // <img src={process.env.PUBLIC_URL + params}
-    // <img src={process.env.PUBLIC_URL + '/images/1.png'}
-    // <img src={image_files[params]}
-    // <img src={image_files['1.png']}
-    
-    const g = "51.png";
-
-    console.log('this', collection);
-    console.log('end');
-    console.log('that', image_files, image_files['11.png']);
-    console.log('end that');
-
     const columns = [
         {field: 'id', hide: true, width: '50', disableClickEventBubbling: true,},
         {field: 'path', headerName: 'NFT', headerAlign: 'center', width: 240, height: 240, disableColumnFilter: true, disableClickEventBubbling: true,
             renderCell: (params)=>{
-                console.log('\nimage files', image_files, '\nparams', params,'\nimage files[paramms]', image_files[params.row], 'asdfa', '\nparams.row.path', params.row.path);
                 return (
                     <div>
                         <img src={process.env.PUBLIC_URL + '/images/' + params.row.path} alt="nft" className="nft" />
@@ -139,7 +124,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID}) {
         async function getUserNfts() {
             const collectionJSONString = await api.getUserNfts(userID);
             setCollection(collectionJSONString);
-            console.log(collectionJSONString);
+            // console.log(collectionJSONString);
         }
         getUserNfts();
     }, []);

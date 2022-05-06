@@ -4,6 +4,7 @@ import UserLogin from "./pages/UserLogin";
 import Collections from "./pages/collections";
 import AccountCreation from "./pages/AccountCreation";
 import API from './API_Interface/API_Interface.js';
+import * as crypto from 'crypto-js';
 
 function App() {
 
@@ -12,7 +13,9 @@ function App() {
   const [user, setUser] = useState({name: ""});
   const [error, setError] = useState("");
 
-
+  let ciphertext;
+  let _ciphertext;
+  let hash;
 
   const CreateAccount = details => {
     console.log('create account', details);
@@ -27,7 +30,22 @@ function App() {
               .then( userInfo => {
                 if( userInfo.status === "Success" ) {
                   console.log("Creating account")
-                  api.createUserInfo(details.name, details.password, 'create')
+                  
+
+
+                  console.log('\n\nencrypt');
+                  ciphertext = crypto.AES.encrypt(details.password, 'thisshouldbeasecret');
+                  _ciphertext = crypto.AES.decrypt(ciphertext.toString(), 'thisshouldbeasecret');
+                  console.log('_ciphertext.tostring(cryptoenc)', _ciphertext.toString(crypto.ENC));
+
+                  console.log('create account hashing');
+                  hash = crypto.SHA1(ciphertext) // 123 = 9844f81e1408f6ecb932137d33bed7cfdcf518a3
+                  console.log(hash.toString());
+
+
+
+
+                  api.createUserInfo(details.name, hash, 'create')
                   api.getUserID(details.name, 'a', 'b', 'get')
                     .then( userInfo => {
                       setUserID(userInfo.userID);
@@ -36,7 +54,7 @@ function App() {
                   setB("LOGIN");
                   setUser({
                     name: details.name,
-                    password: details.password
+                    password: hash.toString()
                   });
                     
                 } else  {
@@ -62,15 +80,30 @@ function App() {
       if (details.name !== "" && details.password !== "") {
           const api = new API();
           async function getUserInfo() {
-              api.getUserInfo(details.name, details.password)
+
+
+
+            console.log('\n\nencrypt');
+            ciphertext = crypto.AES.encrypt(details.password, 'thisshouldbeasecret');
+            _ciphertext = crypto.AES.decrypt(ciphertext.toString(), 'thisshouldbeasecret');
+            console.log('_ciphertext.tostring(cryptoenc)', _ciphertext.toString(crypto.ENC));
+
+            console.log('hashing');
+            hash = crypto.SHA1(ciphertext).toString() // 123 = 9844f81e1408f6ecb932137d33bed7cfdcf518a3
+            console.log(hash.toString());
+
+
+
+              api.getUserInfo(details.name, hash)
                   .then( userInfo => {
                     if( userInfo.status === "OK" ) {
                       console.log("Logged in")
                       setUserID(userInfo.userID);
                       setUser({
                         name: details.name,
-                        password: details.password
+                        password: hash
                       });
+                      console.log('\n\n\nlogin set user as:', user)
                         
                     } else  {
                       console.log("Details do not match");
@@ -158,7 +191,7 @@ function App() {
     return (
       <div className="App">
         {(user.name !== "") ? (
-            <Collections Logout={Logout} SelectDevice={SelectDevice} Transfer={Transfer} error={error} userID={userID}/>
+            <Collections Logout={Logout} SelectDevice={SelectDevice} Transfer={Transfer} error={error} userID={userID} user={user}/>
         ) : (
             <UserLogin Login={Login} error={error}/>
         )}
