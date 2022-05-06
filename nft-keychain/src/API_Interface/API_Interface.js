@@ -75,9 +75,9 @@ export default class APIInterface {
                 }));
     }
 
-    async putUserNft(url, title, path, userID){
+    async putUserNft(url, title, path, userID, keyhash){
         console.log('putUserNft 1');
-        return axiosAgent.get(`collection/${url}/${title}/${path}/${userID}`)
+        return axiosAgent.get(`collection/${url}/${title}/${path}/${userID}/${keyhash}`)
             .then(userInfo => userInfo.data)
             .catch(error => (
                 {

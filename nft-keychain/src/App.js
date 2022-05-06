@@ -56,7 +56,7 @@ function App() {
         }
         checkUserInfo()
       } else {
-        console.log('username and password cant be empty'); // TODO: need better error checking
+        console.log('username and password cant be empty'); // TODO: better error checking
       }
 
     }
