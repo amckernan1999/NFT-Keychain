@@ -158,15 +158,19 @@ function App() {
 
     const Remove = async (nftID) => {
         console.log("entered remove");
+        // console.log('nftID:', nftID); // array of array for some reason, we can just always grab the first
        // await writer.write(encoder.encode("remove"));
         //await writer.write(encoder.encode(nftID));
 
         const api = new API();
-        async function removeUserNft() {
-            await api.removeUserNft('1');
+        async function removeUserNft(rowid) {
+            await api.removeUserNft(rowid);
         }
 
-        await removeUserNft();
+        for (let i = 0; i < nftID.length; i++) {
+          // console.log(i, nftID[0][i])
+          await removeUserNft(nftID[i]);
+        }
     }
 
 

@@ -65,6 +65,7 @@ class NftController {
     }
 
     async removeUserNft(ctx){
+        console.log('removing nft with id:', ctx.params.id)
         return new Promise((resolve, reject) => {
             let query = "DELETE FROM collections WHERE id=?;";
             dbConnection.query(
