@@ -73,6 +73,7 @@ function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, use
                     className='button'
                     onClick={() => {
                         navigator.clipboard.writeText("Hello").then(r => {console.log('Copied key to clipboard: ', "hello");});
+                        console.log('getkeytest:');
                     }}
                 >GET KEY
                 </Button>
@@ -106,7 +107,30 @@ function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, use
             align: 'center',
             disableColumnFilter: true,
             disableClickEventBubbling: true,
-            renderCell: renderGetKeyButton,
+            renderCell: (params) => {
+                return (
+                    <strong>
+                        <Button
+                            className='button'
+                            onClick={(rowid) => {
+                                navigator.clipboard.writeText("Hello").then(r => {console.log('Copied key to clipboard: ', "hello");});
+
+                                // get key button from database key
+                                const api = new API();
+                                async function getKey(rowid) {
+                                    console.log('getkeyrowid:', rowid);
+                                    await api.getKey(rowid).then( keyhash => {
+                                        console.log('the decrypted key:', crypto.AES.decrypt(keyhash.keys_hash, user.password).toString(crypto.enc.Utf8));
+                                    });
+                                }
+                                getKey(params.row.id);
+
+                            }}
+                        >GET KEY
+                        </Button>
+                    </strong>
+                )
+            }
         },
         {
             field: 'url',

@@ -96,5 +96,16 @@ export default class APIInterface {
                 }));
     }
 
+    async getKey(id){
+        console.log('getUserNfts a');
+        return axiosAgent.get(`collection/getkey/${id}`)
+            .then(userInfo => userInfo.data)
+            .catch(error => (
+                {
+                    error,
+                    user: undefined
+                }));
+    }
+
     
 }

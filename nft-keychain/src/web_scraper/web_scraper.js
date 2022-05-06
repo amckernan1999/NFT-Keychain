@@ -104,6 +104,12 @@ async function grab_image(url, title) {
   });
 }
 
+/*
+https://foundation.app/@spasi___sohrani/GPSG/15
+https://makersplace.com/bluepolescapital/a-spark-of-an-idea-1-of-1-167320/
+https://knownorigin.io/gallery/10817000-iv-xx
+https://opensea.io/assets/matic/0x28009881f0ffe85c90725b8b02be55773647c64a/20
+*/
 function web_scraper(url_input, title_input) {
   console.log('in web scraper with url:', url_input);
   let image_url;
