@@ -1,6 +1,6 @@
 use nftkeychain;
 
-DROP TABLE IF EXISTS collections CASCADE;
+DROP TABLE IF EXISTS collections;
 
 CREATE TABLE `collections` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
