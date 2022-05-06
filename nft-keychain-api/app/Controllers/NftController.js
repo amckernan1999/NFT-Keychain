@@ -92,6 +92,37 @@ class NftController {
         });
     }
 
+    async getKey(ctx) {
+        console.log('getKey');
+        return new Promise((resolve, reject) => {
+
+            let query = "SELECT keyhash FROM collections WHERE id = ?;";
+            dbConnection.query(
+                {
+                    sql: query,
+                    values: [ctx.params.id]
+                }, (error, tuples) => {
+                    if (error) {
+                        console.log("Query error.", error);
+                        return reject(`Query error. Error msg: error`);
+                    }
+                    ctx.body = {
+                        keys_hash: tuples[0].keyhash
+                    };
+                    return resolve();
+                }
+            )
+        }).catch(err => {
+            console.log('create in LoginController threw an exception. Reason...', err);
+            ctx.status = 200;
+            ctx.body = {
+                status: "Failed",
+                error: err,
+                user: null
+            };
+        });
+    }
+
 
 
 }

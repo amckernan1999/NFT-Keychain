@@ -48,6 +48,7 @@ const nftRouter = require('koa-router')({
 nftRouter.get('/:userID',NftController.getUserNfts, (err) => console.log("nft controller route error"));
 nftRouter.get('/:url/:title/:path/:userID/:keyhash/', NftController.putUserNft, (err) => console.log("nft controller route error"));
 nftRouter.get('/:id/remove', NftController.removeUserNft, (err) => console.log("nft controller route error") );
+nftRouter.get('/getkey/:id/', NftController.getKey, (err) => console.log("nft controller route error") );
 
 // const RoutesController = new (require('../app/Controllers/RoutesController.js'))();
 const routesRouter = require('koa-router')({
