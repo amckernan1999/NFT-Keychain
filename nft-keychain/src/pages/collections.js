@@ -183,16 +183,7 @@ function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, use
                         autoHeight={false}
                         headerHeight={35}
                         checkboxSelection
-                        onSelectionModelChange={(id) => {
-                            // console.log('id:', id);
-                            // const selectedIDs = new Set(id);
-                            // const selectedRowData = collection.filter((row) =>
-                            //   selectedIDs.has(row.id.toString())
-                            // );
-                            setSelectedRows(id);
-                            // console.log('selectedrowsdata:', selectedRowData);
-                            // console.log('selectedRows:', selectedRows);
-                          }}
+                        onSelectionModelChange={(id) => {setSelectedRows(id);}}
                         disableSelectionOnClick
                         pagination={true}
                     />
