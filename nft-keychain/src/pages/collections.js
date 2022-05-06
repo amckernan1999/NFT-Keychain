@@ -18,7 +18,7 @@ function importAll(r) {
 }
 const image_files = importAll(require.context('../../public/images', false, /\.(png)$/));
 
-function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
+function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, user}) {
     const [nftDetails, setNftDetails]= useState({title:'',url:'',key:''});
 
     const AxiosConfiguration = () => {
@@ -155,6 +155,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
                     className='button'
                     variant="contained"
                     size="large"
+                    onClick={Remove}
                 >DELETE
                 </Button>
                 <Button
