@@ -106,7 +106,6 @@ class NftController {
                         console.log("Query error.", error);
                         return reject(`Query error. Error msg: error`);
                     }
-                    console.log('t:', tuples);
                     ctx.body = {
                         keys_hash: tuples[0].keyhash
                     };

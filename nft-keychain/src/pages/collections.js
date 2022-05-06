@@ -21,7 +21,7 @@ const image_files = importAll(require.context('../../public/images', false, /\.(
 function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, user}) {
     const [nftDetails, setNftDetails]= useState({title:'',url:'',key:''});
     const [selectedRows, setSelectedRows] = useState([])
-    console.log('selectedRows:', selectedRows);
+    // console.log('selectedRows:', selectedRows);
 
     const AxiosConfiguration = () => {
         axios.defaults.withCredentials = false;
@@ -40,12 +40,14 @@ function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, use
         let nft_key_on_db_test = nft_key_to_db;
         nft_key_to_db = nft_key_to_db.toString().replaceAll('/', '%2F'); // this is what's send to the db to later be sent to the device with transfer button
 
-// this is the security stuff that should be added on get key
-        let nft_key_from_device_test = crypto.AES.decrypt(nft_key_on_db_test, user.password); 
-        // nft_key_on_db_test is what will be restored from the device with the get key button
-        // change the first variable, nft_key_to_db, to whatever you get back from the device
-        // nft_key_to_device_test.toString(crypto.enc.Utf8) is shown to user as their key
-        console.log('returned nft key should be:', nft_key_from_device_test.toString(crypto.enc.Utf8));
+
+        // unused with get key button working
+// // this is the security stuff that should be added on get key
+//         let nft_key_from_device_test = crypto.AES.decrypt(nft_key_on_db_test, user.password); 
+//         // nft_key_on_db_test is what will be restored from the device with the get key button
+//         // change the first variable, nft_key_to_db, to whatever you get back from the device
+//         // nft_key_to_device_test.toString(crypto.enc.Utf8) is shown to user as their key
+//         console.log('returned nft key should be:', nft_key_from_device_test.toString(crypto.enc.Utf8));
 
         const api = new API();
         async function putUserNft() {
@@ -66,6 +68,7 @@ function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, use
         Logout();
     };
 
+/*  not used anymore, i moved this to the button press, i couldn't get params variables to it as an outside function
     const renderGetKeyButton = () => {
         return (
             <strong>
@@ -80,6 +83,7 @@ function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, use
             </strong>
         )
     }
+*/
 
     const columns = [
         {field: 'id', hide: true, width: '50', disableClickEventBubbling: true,},
@@ -112,13 +116,12 @@ function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, use
                     <strong>
                         <Button
                             className='button'
-                            onClick={(rowid) => {
+                            onClick={() => {
                                 navigator.clipboard.writeText("Hello").then(r => {console.log('Copied key to clipboard: ', "hello");});
 
-                                // get key button from database key
+                                // get key button from database
                                 const api = new API();
                                 async function getKey(rowid) {
-                                    console.log('getkeyrowid:', rowid);
                                     await api.getKey(rowid).then( keyhash => {
                                         console.log('the decrypted key:', crypto.AES.decrypt(keyhash.keys_hash, user.password).toString(crypto.enc.Utf8));
                                     });
