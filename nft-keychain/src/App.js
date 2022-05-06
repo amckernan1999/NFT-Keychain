@@ -153,12 +153,24 @@ function App() {
     const Retrieve = async () => {
         console.log("entered retrieve");
         await writer.write(encoder.encode("pull"));
+
     }
 
-    const Remove = async (nftTitle) => {
+    const Remove = async (nftID) => {
         console.log("entered remove");
-        await writer.write(encoder.encode("remove"));
-        await writer.write(encoder.encode(nftTitle));
+        // console.log('nftID:', nftID); // array of array for some reason, we can just always grab the first
+       // await writer.write(encoder.encode("remove"));
+        //await writer.write(encoder.encode(nftID));
+
+        const api = new API();
+        async function removeUserNft(rowid) {
+            await api.removeUserNft(rowid);
+        }
+
+        for (let i = 0; i < nftID.length; i++) {
+          // console.log(i, nftID[0][i])
+          await removeUserNft(nftID[i]);
+        }
     }
 
 
@@ -174,7 +186,7 @@ function App() {
     return (
       <div className="App">
         {(user.name !== "") ? (
-            <Collections Logout={Logout} SelectDevice={SelectDevice} Transfer={Transfer} error={error} userID={userID} user={user}/>
+            <Collections Logout={Logout} SelectDevice={SelectDevice} Remove={Remove} Transfer={Transfer} error={error} userID={userID} user={user}/>
         ) : (
             <UserLogin Login={Login} error={error}/>
         )}

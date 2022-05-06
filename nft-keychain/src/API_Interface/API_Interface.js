@@ -85,5 +85,16 @@ export default class APIInterface {
                 }));
     }
 
+    async removeUserNft(id){
+        console.log("remove Nft");
+        return axiosAgent.get(`collection/${id}/remove`)
+            .then(userInfo => userInfo.data)
+            .catch(error => (
+                {
+                    error,
+                    user: undefined
+                }));
+    }
+
     
 }

@@ -18,8 +18,10 @@ function importAll(r) {
 }
 const image_files = importAll(require.context('../../public/images', false, /\.(png)$/));
 
-function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
+function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, user}) {
     const [nftDetails, setNftDetails]= useState({title:'',url:'',key:''});
+    const [selectedRows, setSelectedRows] = useState([])
+    console.log('selectedRows:', selectedRows);
 
     const AxiosConfiguration = () => {
         axios.defaults.withCredentials = false;
@@ -130,7 +132,7 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
             setCollection(collectionJSONString);
         }
         getUserNfts();
-    }, []);
+    }, [selectedRows]);
 
     return (
         <div className='container'>
@@ -155,6 +157,10 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
                     className='button'
                     variant="contained"
                     size="large"
+                    onClick={() => {
+                        Remove(selectedRows);
+                        setSelectedRows([]);
+                    }}
                 >DELETE
                 </Button>
                 <Button
@@ -177,6 +183,16 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
                         autoHeight={false}
                         headerHeight={35}
                         checkboxSelection
+                        onSelectionModelChange={(id) => {
+                            // console.log('id:', id);
+                            // const selectedIDs = new Set(id);
+                            // const selectedRowData = collection.filter((row) =>
+                            //   selectedIDs.has(row.id.toString())
+                            // );
+                            setSelectedRows(id);
+                            // console.log('selectedrowsdata:', selectedRowData);
+                            // console.log('selectedRows:', selectedRows);
+                          }}
                         disableSelectionOnClick
                         pagination={true}
                     />
