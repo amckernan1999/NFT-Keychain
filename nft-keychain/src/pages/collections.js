@@ -42,11 +42,12 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
 
 
 
-
+// this is the security stuff that should be added on transfer
         let nft_key_to_device = crypto.AES.encrypt(nft_key, user.password); 
         // nft_key_ciphertext.toString() is sent to device
         console.log('this should be stored on device:', nft_key_to_device.toString());
 
+// this is the security stuff that should be added on get key
         let nft_key_from_device = crypto.AES.decrypt(nft_key_to_device, user.password); 
         // _nft_key_ciphertext is restored from device.
         // change the first variable, nft_key_ciphertext.toString(), to whatever you get back from the device
