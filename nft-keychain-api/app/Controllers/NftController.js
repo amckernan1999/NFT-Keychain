@@ -8,7 +8,7 @@ class NftController {
         console.log('getUserNFTs b');
         return new Promise((resolve, reject) => {
 
-            let query = "SELECT id, title, path FROM collections WHERE userID =?;";
+            let query = "SELECT id, title, path, url FROM collections WHERE userID =?;";
             dbConnection.query(
                 {
                     sql: query,
