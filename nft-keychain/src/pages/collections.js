@@ -8,6 +8,7 @@ import API from "../API_Interface/API_Interface";
 import Modal from '../Modal';
 import axios from 'axios';
 import * as crypto from 'crypto-js';
+import {Link} from "@mui/material";
 
 // importing all of the images the web scraper has pulled
 function importAll(r) {
@@ -104,6 +105,21 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
             disableColumnFilter: true,
             disableClickEventBubbling: true,
             renderCell: renderGetKeyButton,
+        },
+        {
+            field: 'url',
+            headerName: 'URL',
+            headerAlign: 'center',
+            align: 'center',
+            width: 50,
+            disableClickEventBubbling: false,
+            disableColumnFilter: true,
+            renderCell: (params) => {
+                return (
+                    <div>
+                        <Link href={params.row.url} target="_blank">Link</Link>
+                    </div>
+                )}
         },
     ];
 
