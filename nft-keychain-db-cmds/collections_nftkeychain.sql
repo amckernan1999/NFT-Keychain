@@ -7,5 +7,6 @@ CREATE TABLE `collections` (
 	`url` varchar(500) NOT NULL,
     `title` varchar(500) NOT NULL,
     `path` varchar(500) NOT NULL,
-    `userID` VARCHAR(8) NOT NULL
+    `userID` VARCHAR(8) NOT NULL,
+    `keyhash` VARCHAR(100) NOT NULL
 );

@@ -9,8 +9,6 @@ import Modal from '../Modal';
 import axios from 'axios';
 import * as crypto from 'crypto-js';
 
-
-
 // importing all of the images the web scraper has pulled
 function importAll(r) {
     let image_files = {};
@@ -19,12 +17,8 @@ function importAll(r) {
 }
 const image_files = importAll(require.context('../../public/images', false, /\.(png)$/));
 
-
-
 function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
     const [nftDetails, setNftDetails]= useState({title:'',url:'',key:''});
-    console.log('collection starts with user set as:', user);
-    console.log('nft details:', nftDetails);
 
     const AxiosConfiguration = () => {
         axios.defaults.withCredentials = false;
@@ -32,7 +26,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
     };
     const axiosAgent2 = AxiosConfiguration();
 
-    // calls the web scraper
     const add_nft = (nft_url, nft_title, nft_key) => {
         let url = nft_url.replaceAll('/', '%2F');
         let resized_image_path = nft_title + ".png";
@@ -40,28 +33,21 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
     
         axiosAgent2.get(`http://localhost:3001/web_scraper/${url}/${nft_title}`)
 
-
-
-// this is the security stuff that should be added on transfer
-        let nft_key_to_device = crypto.AES.encrypt(nft_key, user.password); 
-        // nft_key_ciphertext.toString() is sent to device
-        console.log('this should be stored on device:', nft_key_to_device.toString());
+        let nft_key_to_db = crypto.AES.encrypt(nft_key, user.password);
+        nft_key_to_db = nft_key_to_db.toString().replaceAll('/', '%2F'); // this is what's send to the db to later be sent to the device with transfer button
 
 // this is the security stuff that should be added on get key
-        let nft_key_from_device = crypto.AES.decrypt(nft_key_to_device, user.password); 
-        // _nft_key_ciphertext is restored from device.
-        // change the first variable, nft_key_ciphertext.toString(), to whatever you get back from the device
-        // _nft_key_ciphertext.toString(crypto.enc.Utf8) is shown to user as their key
-        console.log('nft key:', nft_key_from_device.toString(crypto.enc.Utf8));
-
-
-        
+        let nft_key_from_device = crypto.AES.decrypt(nft_key_to_db, user.password); 
+        // nft_key_to_db is what will be restored from the device with the get key button
+        // change the first variable, nft_key_to_db, to whatever you get back from the device
+        // nft_key_to_device.toString(crypto.enc.Utf8) is shown to user as their key
+        // console.log('returned nft key should be:', nft_key_from_device.toString(crypto.enc.Utf8));
 
         const api = new API();
         async function putUserNft() {
-          api.putUserNft(url, nft_title, resized_image_path, userID)
+          api.putUserNft(url, nft_title, resized_image_path, userID, nft_key_to_db)
               .then( () => {
-                console.log('nft titled', nft_title, 'added to users collection');
+                // console.log('nft titled', nft_title, 'added to users collection');
                 // maybe can add some error checking later
               });
         }
@@ -125,7 +111,6 @@ function Collections({Logout, SelectDevice, Transfer, error, userID, user}) {
         async function getUserNfts() {
             const collectionJSONString = await api.getUserNfts(userID);
             setCollection(collectionJSONString);
-            // console.log(collectionJSONString);
         }
         getUserNfts();
     }, []);

@@ -17,7 +17,7 @@ export default function  Modal({ open, onClose, userID, nftDetails, setNftDetail
                     key: document.getElementById('key').value
                 });
 
-            console.log('in modal submit handler', nftDetails.url, nftDetails.title, nftDetails.key); 
+            // console.log('in modal submit handler', nftDetails.url, nftDetails.title, nftDetails.key); 
             add_nft(document.getElementById('url').value, document.getElementById('title').value, document.getElementById('key').value)
             onClose();
         }

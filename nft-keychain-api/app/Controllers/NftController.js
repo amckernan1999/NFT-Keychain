@@ -63,11 +63,11 @@ class NftController {
 
         return new Promise((resolve, reject) => {
 
-            let query = "INSERT INTO collections (url, title, path, userID)  VALUES (?,?,?,?);";
+            let query = "INSERT INTO collections (url, title, path, userID, keyhash)  VALUES (?,?,?,?,?);";
             dbConnection.query(
                 {
                     sql: query,
-                    values: [ ctx.params.url, ctx.params.title, ctx.params.path, ctx.params.userID]
+                    values: [ ctx.params.url, ctx.params.title, ctx.params.path, ctx.params.userID, ctx.params.keyhash]
                 }, (error, tuples) => {
                     if (error) {
                         console.log("Query error.", error);
