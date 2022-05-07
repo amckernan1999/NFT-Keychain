@@ -154,12 +154,12 @@ function Collections({Logout, SelectDevice, Transfer, Remove, error, userID, use
 
     useEffect(() => {
         const api = new API();
-        async function getUserNfts() {
+        async function getUserNfts(userID) {
             const collectionJSONString = await api.getUserNfts(userID);
             setCollection(collectionJSONString);
         }
-        getUserNfts();
-    }, [selectedRows]);
+        getUserNfts(userID);
+    }, [selectedRows, image_files]);
 
     return (
         <div className='container'>

@@ -37,17 +37,18 @@ function App() {
                   console.log(hash.toString());
 
                   api.createUserInfo(details.name, hash, 'create')
+                    .then(
                   api.getUserID(details.name, 'a', 'b', 'get')
                     .then( userInfo => {
                       setUserID(userInfo.userID);
-                    })
+                    
                   console.log("Logged in");
                   setB("LOGIN");
                   setUser({
                     name: details.name,
                     password: hash.toString()
                   });
-                    
+                }));
                 } else  {
                   console.log(userInfo, "already a user with that username");
                   setError("error-message");
